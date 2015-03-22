@@ -1,10 +1,12 @@
 package com.example.marcin.myfirstapplication;
 
+import android.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.os.StrictMode;
 
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
 
         LocationObject = new gps(this);
 
-
         searchText = (EditText)findViewById(R.id.searchtext);
         searchButton = (Button)findViewById(R.id.searchbutton);
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
@@ -51,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
 
         searchButton.setOnClickListener(searchButtonOnClickListener);
     }
-
 
 
     private Button.OnClickListener searchButtonOnClickListener = new Button.OnClickListener(){
