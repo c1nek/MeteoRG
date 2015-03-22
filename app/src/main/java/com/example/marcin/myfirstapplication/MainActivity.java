@@ -59,32 +59,19 @@ public class MainActivity extends ActionBarActivity {
     String FlickrContentType = "&content_type=1";
     //*****************//
 
-    //location types//
-    public TextView latituteField, longitudeField, addressField;
-    boolean isGPSEnabled = false;
-    boolean isNetworkEnabled = false;
-    boolean canGetLocation = false;
-    Location location, locationTemp;
-    double latitude, longitude;
-    String latitudeS, longitudeS;
-    String country;
-    protected LocationManager locationManager;
-    Context mContext;
-
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
-    //*****************//
 
     //layout types//
     EditText searchText;
     Button searchButton;
-    TextView textQueryResult, textJsonResult, textQuery, URL;
+    TextView latituteField,longitudeField,addressField;
     ImageView imageFlickrPhoto;
     Bitmap bmFlickr;
     //*****************//
+
+
+    //location types//
+
+    gps LocationObject;
 
 
     @Override
@@ -96,6 +83,8 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        LocationObject = new gps(this);
 
         searchText = (EditText)findViewById(R.id.searchtext);
         searchButton = (Button)findViewById(R.id.searchbutton);
@@ -113,27 +102,26 @@ public class MainActivity extends ActionBarActivity {
 
         public void onClick(View arg0) {
 
-            getLocation();
-
-
-            String temp = String.valueOf(latitude);
-            String temp2 = String.valueOf(longitude);
-
-            latituteField.setText(temp);
-            longitudeField.setText(temp2);
-
+            refreshLocation();
 
             String searchQ = searchText.getText().toString();
             String searchResult = QueryFlickr(searchQ);
-            textQueryResult.setText(searchResult);
             String jsonResult = ParseJSON(searchResult);
-            textJsonResult.setText(jsonResult);
 
             if (bmFlickr != null){
                 imageFlickrPhoto.setImageBitmap(bmFlickr);
 
             }
         }};
+
+    public void refreshLocation(){
+        LocationObject.getLocation();
+
+        latituteField.setText(Double.toString(LocationObject.latitude));
+        longitudeField.setText(Double.toString(LocationObject.longitude));
+        addressField.setText(LocationObject.City);
+
+    }
 
     private String QueryFlickr(String q){
 
@@ -148,7 +136,6 @@ public class MainActivity extends ActionBarActivity {
                         + FlickrSort
                         + FlickrQuery_tag + q
                         + FlickrQuery_key + FlickrApiKey;
-        textQuery.setText(qString);
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
 
@@ -232,7 +219,6 @@ public class MainActivity extends ActionBarActivity {
         String FlickrPhotoPath =
                 "http://farm" + farm + ".static.flickr.com/"
                         + server + "/" + id + "_" + secret + "_b.jpg";
-        URL.setText(FlickrPhotoPath);
 
         URL FlickrPhotoUrl = null;
 
@@ -258,61 +244,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    public Location getLocation() {
-        try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(LOCATION_SERVICE);
 
-            // getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled
-                            (LocationManager.NETWORK_PROVIDER);
-
-            if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
-            } else {
-                this.canGetLocation = true;
-                if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) this);
-                    if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation
-                                        (LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-
-                        }
-                    }
-                }
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
-                        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) this);
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation
-                                    (LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return location;
-    }
 
 
 }

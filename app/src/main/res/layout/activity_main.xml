@@ -114,7 +114,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="miasto"
-                android:id="@+id/gpscity" />
+                android:id="@+id/gpscity"
+                android:textColor="#ffffffff"
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
