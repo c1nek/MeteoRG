@@ -127,8 +127,7 @@ public class flickr {
                     + "farm: " + FlickrPhoto.getString("farm") + "\n"
                     + "title: " + FlickrPhoto.getString("title") + "\n";
 
-            bmFlickr = LoadPhotoFromFlickr(flickrId, flickrOwner, flickrSecret,
-                    flickrServer, flickrFarm, flickrTitle);
+            LoadPhotoFromFlickr(flickrId, flickrOwner, flickrSecret,flickrServer, flickrFarm, flickrTitle);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -165,7 +164,7 @@ public class flickr {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        bmFlickr = bm;
         return bm;
     }
 
