@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
 
             WeatherObject = new weather(clearString(LocationObject.City));
 
-            FlickrTags = clearString(WeatherObject.conditions+LocationObject.City);
+            FlickrTags = clearString(WeatherObject.conditions+" "+LocationObject.City);
             FlickrObject = new flickr(FlickrTags);
 
             if (FlickrObject.bmFlickr != null){

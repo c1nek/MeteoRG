@@ -81,12 +81,17 @@ public class weather {
         try {
             JSONObject JsonObject = new JSONObject(json);
 
+
+            JSONArray JSONArray_weather = JsonObject.getJSONArray("weather");
+                JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
+                conditions = JSONObject_weather.getString("main");
+
+
             JSONObject JSONObject_main = JsonObject.getJSONObject("main");
             temp = (JSONObject_main.getDouble("temp")-273.15);
             pressure = JSONObject_main.getDouble("pressure");
 
-            JSONObject JSONObject_weather = JsonObject.getJSONObject("weather");
-            conditions = JSONObject_weather.getString("description");
+
 
           } catch (JSONException e) {
             e.printStackTrace();
