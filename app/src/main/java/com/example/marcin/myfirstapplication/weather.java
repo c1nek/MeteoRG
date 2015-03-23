@@ -26,7 +26,7 @@ public class weather {
         String JSONResult = null;
 
     //weather deatils strings//
-        double temp = 0;
+        double temp= 0;
         double pressure = 0;
         String conditions = null;
 
@@ -42,7 +42,7 @@ public class weather {
         String qResult = null;
 
         String qString =
-                URL + "Poznań";
+                URL + q;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
 
@@ -82,8 +82,8 @@ public class weather {
             JSONObject JsonObject = new JSONObject(json);
 
             JSONObject JSONObject_main = JsonObject.getJSONObject("main");
-            temp = JSONObject_main.getDouble("temp");
-            pressure = JSONObject_main.getDouble("prssure");
+            temp = (JSONObject_main.getDouble("temp")-273.15);
+            pressure = JSONObject_main.getDouble("pressure");
 
             JSONObject JSONObject_weather = JsonObject.getJSONObject("weather");
             conditions = JSONObject_weather.getString("description");

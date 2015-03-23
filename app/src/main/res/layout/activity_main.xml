@@ -37,29 +37,6 @@
 
     </FrameLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/layout"
-        android:weightSum="1"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:layout_gravity="center">
-
-        <EditText
-            android:id="@+id/searchtext"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
-        <Button
-            android:id="@+id/searchbutton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            />
-
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -115,6 +92,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/searchbutton"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_gravity="right"
+            android:alpha="0.5" />
 
     </FrameLayout>
 

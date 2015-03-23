@@ -16,7 +16,6 @@ public class MainActivity extends ActionBarActivity {
 
 
     //layout types//
-    EditText searchText;
     Button searchButton;
     TextView addressField,jsonWeather,tempField,descriptionField;
     ImageView imageFlickrPhoto;
@@ -44,17 +43,13 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-
         LocationObject = new gps(this);
 
-
-        searchText = (EditText)findViewById(R.id.searchtext);
         searchButton = (Button)findViewById(R.id.searchbutton);
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
         addressField = (TextView) findViewById(R.id.gpscity);
         tempField = (TextView) findViewById(R.id.temp);
         descriptionField = (TextView) findViewById(R.id.description);
-
 
         searchButton.setOnClickListener(searchButtonOnClickListener);
     }
@@ -78,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
                 /////////////////////////////DOROBIĆ DOMYŚLNE!!!!!!///////////////
             }
 
-            tempField.setText(Double.toString(WeatherObject.temp));
+            tempField.setText((Integer.toString((int)WeatherObject.temp))+"\u00b0"+"C");
             descriptionField.setText(WeatherObject.conditions);
         }};
 
