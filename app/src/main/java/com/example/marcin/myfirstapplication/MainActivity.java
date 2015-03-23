@@ -18,7 +18,7 @@ public class MainActivity extends ActionBarActivity {
     //layout types//
     EditText searchText;
     Button searchButton;
-    TextView latituteField,longitudeField,addressField;
+    TextView addressField,jsonWeather,tempField,descriptionField;
     ImageView imageFlickrPhoto;
     //*****************//
 
@@ -28,6 +28,10 @@ public class MainActivity extends ActionBarActivity {
 
     //flickr types//
     flickr FlickrObject;
+    String FlickrTags;
+
+    //weather//
+    weather WeatherObject;
 
 
     @Override
@@ -40,14 +44,16 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
+
         LocationObject = new gps(this);
+
 
         searchText = (EditText)findViewById(R.id.searchtext);
         searchButton = (Button)findViewById(R.id.searchbutton);
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
-        latituteField = (TextView) findViewById(R.id.gpslong);
-        longitudeField = (TextView) findViewById(R.id.gpslat);
         addressField = (TextView) findViewById(R.id.gpscity);
+        tempField = (TextView) findViewById(R.id.temp);
+        descriptionField = (TextView) findViewById(R.id.description);
 
 
         searchButton.setOnClickListener(searchButtonOnClickListener);
@@ -60,19 +66,41 @@ public class MainActivity extends ActionBarActivity {
 
             refreshLocation();
 
-            String searchQ = searchText.getText().toString();
-            FlickrObject = new flickr(searchQ);
+            WeatherObject = new weather(clearString(LocationObject.City));
+
+            FlickrTags = clearString(WeatherObject.conditions+LocationObject.City);
+            FlickrObject = new flickr(FlickrTags);
 
             if (FlickrObject.bmFlickr != null){
                 imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
+
+
+                /////////////////////////////DOROBIĆ DOMYŚLNE!!!!!!///////////////
             }
+
+            tempField.setText(Double.toString(WeatherObject.temp));
+            descriptionField.setText(WeatherObject.conditions);
         }};
 
     public void refreshLocation(){
         LocationObject.getLocation();
-        latituteField.setText(Double.toString(LocationObject.latitude));
-        longitudeField.setText(Double.toString(LocationObject.longitude));
         addressField.setText(LocationObject.City);
+    }
+
+    public String clearString(String oldString){
+        String newString = oldString;
+        newString = newString.replaceAll(" ", ",");
+        newString = newString.replaceAll("ą", "a");
+        newString = newString.replaceAll("ć", "c");
+        newString = newString.replaceAll("ę", "e");
+        newString = newString.replaceAll("ó", "o");
+        newString = newString.replaceAll("ż", "z");
+        newString = newString.replaceAll("ł", "l");
+        newString = newString.replaceAll("ź", "z");
+        newString = newString.replaceAll("ń", "n");
+        newString = newString.replaceAll("ś", "s");
+
+        return newString;
     }
 
 
