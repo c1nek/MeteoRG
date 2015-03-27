@@ -30,16 +30,60 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:gravity="center"
-            android:alpha="1"
             android:layout_alignWithParentIfMissing="false"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/FLayout" />
+
+        <ImageView
+            android:layout_width="113dp"
+            android:layout_height="113dp"
+            android:id="@+id/weatherIcon"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="0.13"
+            android:layout_margin="25dp"
+            android:background="@drawable/simple_weather"
+            android:scaleType="matrix" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gradient2"
+            android:background="@drawable/footer2"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="true"
+            android:layout_alignBottom="@+id/FLayout"
+            android:layout_alignLeft="@+id/FLayout"
+            android:layout_alignStart="@+id/FLayout"
+            android:alpha="0.5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="miasto"
+            android:id="@+id/gpscity"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:textIsSelectable="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="00:00"
+            android:id="@+id/time"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textColor="#ffffffff" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -53,54 +97,55 @@
             android:layout_alignLeft="@+id/FLayout"
             android:layout_alignStart="@+id/FLayout" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="left|bottom"
-            android:gravity="left|bottom">
-
-            <TextView
-                android:layout_width="156dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/description"
-                android:textColor="#ffffffff"
-                android:textSize="25dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="miasto"
-                android:id="@+id/gpscity"
-                android:textColor="#ffffffff"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="[temp]"
-                android:id="@+id/temp"
-                android:textColor="#ffffffff"
-                android:textSize="50dp"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:gravity="left|bottom"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/searchbutton"
-            android:layout_width="53dp"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:layout_gravity="right"
-            android:alpha="0.5" />
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/Refresh"
+            android:background="@drawable/refresh"
+            android:layout_weight="0.03"
+            android:alpha="0.5"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp" />
 
     </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal|top"
+        android:gravity="left|bottom"
+        android:padding="10dp"
+        android:nestedScrollingEnabled="false"
+        android:weightSum="1"
+        android:background="#715f5f5f">
+
+        <TextView
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/description"
+            android:textColor="#ffffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="[temp]"
+            android:id="@+id/temp"
+            android:textColor="#ffffffff"
+            android:textSize="65dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:gravity="left|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textStyle="normal" />
+
+    </LinearLayout>
 
 </RelativeLayout>

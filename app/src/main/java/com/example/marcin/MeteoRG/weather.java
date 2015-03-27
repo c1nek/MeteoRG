@@ -1,4 +1,4 @@
-package com.example.marcin.myfirstapplication;
+package com.example.marcin.MeteoRG;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -29,8 +29,7 @@ public class weather {
         double temp= 0;
         double pressure = 0;
         String conditions = null;
-
-
+        String conditionsShort = null;
 
     public weather(String tags){
         this.tags = tags;
@@ -41,8 +40,12 @@ public class weather {
 
         String qResult = null;
 
+        String lang = "&lang-pl";
+        String units = "&units=metric";
+
         String qString =
-                URL + q;
+                URL + q + lang + units;
+
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
 
@@ -75,7 +78,6 @@ public class weather {
         JSONResult = qResult;
         return qResult;}
 
-
     private void ParseJSON(String json) {
 
         try {
@@ -83,20 +85,18 @@ public class weather {
 
 
             JSONArray JSONArray_weather = JsonObject.getJSONArray("weather");
-                JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
-                conditions = JSONObject_weather.getString("main");
-
+            JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
+                conditionsShort = JSONObject_weather.getString("main");
 
             JSONObject JSONObject_main = JsonObject.getJSONObject("main");
-            temp = (JSONObject_main.getDouble("temp")-273.15);
-            pressure = JSONObject_main.getDouble("pressure");
-
-
+                temp = (JSONObject_main.getDouble("temp"));
+                pressure = JSONObject_main.getDouble("pressure");
 
           } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 
 
 }

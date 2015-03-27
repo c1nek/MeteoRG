@@ -1,4 +1,4 @@
-package com.example.marcin.myfirstapplication;
+package com.example.marcin.MeteoRG;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

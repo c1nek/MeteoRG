@@ -1,4 +1,4 @@
-package com.example.marcin.myfirstapplication;
+package com.example.marcin.MeteoRG;
 
 /**
  * Created by Marcin on 2015-03-21.
@@ -36,6 +36,7 @@ public class gps extends Service implements LocationListener{
     double longitude;
 
     String City;
+    String Country;
 
     // odleglosc do update (metry)
     private static final long MIN_ODLEGLOSC = 1000;
@@ -95,7 +96,7 @@ public class gps extends Service implements LocationListener{
     }
     public String getCity(double lat, double lon){
 
-        String city = null;
+        String city = null, country = null;
         Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
         List<Address> addresses = null;
         try {
@@ -105,7 +106,10 @@ public class gps extends Service implements LocationListener{
         }
         if (addresses.size() > 0) {
             city = addresses.get(0).getLocality();
+            country = addresses.get(0).getCountryCode();
+
         }
+        Country = country;
         City = city;
         return city;
     }

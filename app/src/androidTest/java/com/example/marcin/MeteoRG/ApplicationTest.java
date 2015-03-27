@@ -1,4 +1,4 @@
-package com.example.marcin.myfirstapplication;
+package com.example.marcin.MeteoRG;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
