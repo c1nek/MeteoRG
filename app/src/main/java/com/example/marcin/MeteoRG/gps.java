@@ -26,17 +26,19 @@ public class gps extends Service implements LocationListener{
 
     private Context mContext = null;
 
+    boolean canGetLocation = false;
+
     boolean GPS_WLACZONY = false;
     boolean SIEC_WLACZONA = false;
 
-    boolean canGetLocation = false;
-
     Location location = null;
+    Location lastKnownLocation = null;
+
     double latitude;
     double longitude;
 
-    String City;
-    String Country;
+    String City = " ";
+    String Country = " ";
 
     // odleglosc do update (metry)
     private static final long MIN_ODLEGLOSC = 1000;
@@ -52,6 +54,7 @@ public class gps extends Service implements LocationListener{
     }
 
     public Location getLocation() {
+
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
             GPS_WLACZONY = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -107,7 +110,6 @@ public class gps extends Service implements LocationListener{
         if (addresses.size() > 0) {
             city = addresses.get(0).getLocality();
             country = addresses.get(0).getCountryCode();
-
         }
         Country = country;
         City = city;

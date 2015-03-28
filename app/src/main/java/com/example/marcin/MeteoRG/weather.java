@@ -26,10 +26,19 @@ public class weather {
         String JSONResult = null;
 
     //weather deatils strings//
-        double temp= 0;
-        double pressure = 0;
+        int temp= 0;
+        int tempMax = 0;
+        int tempMin = 0;
+        int pressure = 0;
+        int humidity = 0;
+        String city = null;
         String conditions = null;
         String conditionsShort = null;
+
+    //weather times UTC//
+        int weatherUpdateTime = 0;
+        int sunriseTime = 0;
+        int sunsetTime = 0;
 
     public weather(String tags){
         this.tags = tags;
@@ -40,11 +49,11 @@ public class weather {
 
         String qResult = null;
 
-        String lang = "&lang-pl";
+        String lang = "&lang=pl";
         String units = "&units=metric";
 
         String qString =
-                URL + q + lang + units;
+                URL + q + units + lang;
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
@@ -83,14 +92,26 @@ public class weather {
         try {
             JSONObject JsonObject = new JSONObject(json);
 
+            JSONObject JSONObject_sys = JsonObject.getJSONObject("sys");
+                sunriseTime = JSONObject_sys.getInt("sunrise");
+                sunsetTime = JSONObject_sys.getInt("sunset");
 
             JSONArray JSONArray_weather = JsonObject.getJSONArray("weather");
             JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
                 conditionsShort = JSONObject_weather.getString("main");
+                conditions = JSONObject_weather.getString("description");
 
             JSONObject JSONObject_main = JsonObject.getJSONObject("main");
-                temp = (JSONObject_main.getDouble("temp"));
-                pressure = JSONObject_main.getDouble("pressure");
+                temp = (JSONObject_main.getInt("temp"));
+                pressure = JSONObject_main.getInt("pressure");
+                tempMin= JSONObject_main.getInt("temp_min");
+                tempMax= JSONObject_main.getInt("temp_max");
+                humidity = JSONObject_main.getInt("humidity");
+
+
+
+               weatherUpdateTime = JsonObject.getInt("dt");
+
 
           } catch (JSONException e) {
             e.printStackTrace();

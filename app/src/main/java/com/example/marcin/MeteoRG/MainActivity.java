@@ -48,6 +48,9 @@ public class MainActivity extends ActionBarActivity {
 
 
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,6 @@ public class MainActivity extends ActionBarActivity {
 
 
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
-
         public void onClick(View arg0) {
             vibra(50);
             letTheShowBegin();
@@ -99,7 +101,7 @@ public class MainActivity extends ActionBarActivity {
 
         WeatherObject = new weather(clearString(LocationObject.City));
 
-        FlickrTags = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
+        FlickrTags = createFlickrTags();
         FlickrObject = new flickr(FlickrTags);
 
         if (FlickrObject.bmFlickr != null){
@@ -109,8 +111,21 @@ public class MainActivity extends ActionBarActivity {
             /////////////////////////////DOROBIĆ DOMYŚLNE!!!!!!///////////////
         }
 
-        tempField.setText((Integer.toString((int)WeatherObject.temp))+"\u00b0"+"C");
+        tempField.setText((Integer.toString(WeatherObject.temp))+"\u00b0"+"C");
         descriptionField.setText(WeatherObject.conditions);
+    }
+    
+    public String createFlickrTags(){
+        String tagsString = null;
+        if(WeatherObject.weatherUpdateTime > WeatherObject.sunsetTime && WeatherObject.weatherUpdateTime < WeatherObject.sunriseTime)
+        {
+            tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
+        }
+        else
+        {
+            tagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
+        }
+        return tagsString;
     }
 
     public void refreshLocation(){
