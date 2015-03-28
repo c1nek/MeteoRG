@@ -2,6 +2,9 @@ package com.example.marcin.MeteoRG;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -17,13 +20,18 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 public class MainActivity extends ActionBarActivity {
 
+    //pager adapter//
+    private PagerAdapter mPagerAdapter;
+    //*****************//
 
     //layout types//
     ImageButton refreshButton;
-    TextView addressField, tempField, descriptionField, timeField;
+    public TextView addressField, timeField;
     ImageView imageFlickrPhoto;
     //*****************//
 
@@ -38,6 +46,10 @@ public class MainActivity extends ActionBarActivity {
     //weather//
     weather WeatherObject;
 
+    //fragment types//
+    //TextView tempField = (TextView) .findFragmentById(R.id.temp);
+    basic_weather_layout basicTemp;
+
 
     //system types//
     Vibrator vibra;
@@ -46,15 +58,11 @@ public class MainActivity extends ActionBarActivity {
     Date time = null;
     String timeString = null;
 
-
-
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.initialisePaging();
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -68,13 +76,24 @@ public class MainActivity extends ActionBarActivity {
         refreshButton = (ImageButton)findViewById(R.id.Refresh);
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
         addressField = (TextView) findViewById(R.id.gpscity);
-        tempField = (TextView) findViewById(R.id.temp);
-        descriptionField = (TextView) findViewById(R.id.description);
-        timeField = (TextView) findViewById(R.id.time);
 
+
+       // descriptionField = (TextView) findViewById(R.id.description);
+        timeField = (TextView) findViewById(R.id.time);
         refreshButton.setOnClickListener(refreshButtonOnClickListener);
 
         letTheShowBegin();
+    }
+
+    private void initialisePaging() {
+
+        List<Fragment> fragments = new Vector<Fragment>();
+        fragments.add(Fragment.instantiate(this, basic_weather_layout.class.getName()));
+        fragments.add(Fragment.instantiate(this, details_weather_layout.class.getName()));
+
+        this.mPagerAdapter = new myPageAdapter(super.getSupportFragmentManager(), fragments);
+        ViewPager pager = (ViewPager) super.findViewById(R.id.pager);
+        pager.setAdapter(this.mPagerAdapter);
     }
 
 
@@ -111,8 +130,12 @@ public class MainActivity extends ActionBarActivity {
             /////////////////////////////DOROBIĆ DOMYŚLNE!!!!!!///////////////
         }
 
-        tempField.setText((Integer.toString(WeatherObject.temp))+"\u00b0"+"C");
-        descriptionField.setText(WeatherObject.conditions);
+       //set fields on fragmentz//
+//        tempField.setText((Integer.toString(WeatherObject.temp))+"\u00b0"+"C");
+       // descriptionField.setText(WeatherObject.conditions);
+
+       // basic_weather_layout basicFragment =(basic_weather_layout)getSupportFragmentManager().findFragmentById(R.id.);
+//        basicTemp.changeText((Integer.toString(WeatherObject.temp))+"\u00b0"+"C");
     }
     
     public String createFlickrTags(){
@@ -147,6 +170,7 @@ public class MainActivity extends ActionBarActivity {
             newString = newString.replaceAll("ź", "z");
             newString = newString.replaceAll("ń", "n");
             newString = newString.replaceAll("ś", "s");
+            newString = newString.replaceAll("null", "");
         }
         catch (Exception e) {
             e.printStackTrace();
