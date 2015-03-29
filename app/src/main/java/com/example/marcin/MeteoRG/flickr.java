@@ -33,8 +33,9 @@ public class flickr {
     String FlickrQuery_tag = "&tags=";
     String FlickrQuery_key = "&api_key=";
     String FlickrApiKey = "64c0f179f8aec0444033c8b2c57a7db0";
-    String FlickrSort = "&sort=relevance";
+    String FlickrSort = "&sort=interestingness-desc";
     String FlickrContentType = "&content_type=1";
+    String lat, lon;
     //*****************//
     String Tags;
     String searchResult;
