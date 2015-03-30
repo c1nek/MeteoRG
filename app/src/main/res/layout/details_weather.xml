@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
+    android:tag="frag2"
     android:padding="10dp">
 
     <ScrollView
@@ -11,7 +12,19 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#32000000">
+            android:background="#64000000">
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/temp_min_ico"
+                android:layout_marginStart="66dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -21,9 +34,22 @@
                 android:id="@+id/minTemp"
                 android:textColor="#ffffffff"
                 android:textSize="17dp"
-                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignTop="@+id/maxTemp"
                 android:layout_toEndOf="@+id/imageView2"
-                android:layout_marginTop="61dp" />
+                android:layout_centerVertical="true" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/temp_max_ico"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignTop="@+id/maxTemp"
+                android:layout_toStartOf="@+id/maxTemp"
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,31 +58,14 @@
                 android:text="[00:00]"
                 android:id="@+id/maxTemp"
                 android:textColor="#ffffffff"
-                android:layout_marginEnd="30dp"
                 android:textSize="17dp"
-                android:layout_alignTop="@+id/minTemp"
-                android:layout_alignParentEnd="true" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView2"
-                android:src="@drawable/temp_min_ico"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView"
-                android:src="@drawable/temp_max_ico"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/maxTemp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginEnd="57dp"
+                android:layout_alignTop="@+id/imageView2"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true" />
 
         </RelativeLayout>
     </ScrollView>

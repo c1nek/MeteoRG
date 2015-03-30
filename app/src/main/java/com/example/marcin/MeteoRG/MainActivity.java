@@ -44,6 +44,10 @@ public class MainActivity extends FragmentActivity {
     //weather//
     public static weather WeatherObject;
 
+    //fragment types//
+    basic_weather_layout basicFragment;
+    details_weather_layout detailsFragment;
+
     //system types//
     Vibrator vibra;
 
@@ -73,6 +77,8 @@ public class MainActivity extends FragmentActivity {
 
         letTheShowBegin();
         this.initialisePaging();
+
+
     }
 
     public weather getwWather(){
@@ -95,6 +101,15 @@ public class MainActivity extends FragmentActivity {
         public void onClick(View arg0) {
             vibra(50);
             letTheShowBegin();
+
+           // basicFragment = (basic_weather_layout) getSupportFragmentManager().findFragmentById(R.id.);
+
+            //basicFragment.fillWithData();
+
+           // detailsFragment = (details_weather_layout) getSupportFragmentManager().findFragmentByTag("frag2");
+           // detailsFragment.fillWithData();
+
+
         }
     };
 
@@ -105,11 +120,6 @@ public class MainActivity extends FragmentActivity {
 
     public void letTheShowBegin(){
 
-        time = Calendar.getInstance().getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        timeString = sdf.format(time);
-        timeField.setText(timeString);
-
         refreshLocation();
 
         WeatherObject = new weather(clearString(LocationObject.City));
@@ -119,11 +129,11 @@ public class MainActivity extends FragmentActivity {
 
         if (FlickrObject.bmFlickr != null){
             imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
-
-
-            /////////////////////////////DOROBIĆ DOMYŚLNE!!!!!!///////////////
         }
-
+        else{
+            FlickrObject = new flickr(WeatherObject.conditionsShort);
+        }
+        clockUpdateThread.start();
     }
     
     public String createFlickrTags(){
@@ -131,11 +141,11 @@ public class MainActivity extends FragmentActivity {
         //////////CALY CZAS CIEMNO, BO UPDATETIME ZWRACA W UTC////////////////
         //if(WeatherObject.weatherUpdateTime.getTime() > WeatherObject.sunsetTime.getTime() && WeatherObject.weatherUpdateTime.getTime() < WeatherObject.sunriseTime.getTime())
         //{
-           // tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
+           tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
         //}
         //else
         //{
-            tagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
+            //otagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
         //}
         return tagsString;
     }
@@ -167,6 +177,32 @@ public class MainActivity extends FragmentActivity {
 
         return newString;
     }
+
+    public void clockUpdate(){
+        time = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        timeString = sdf.format(time);
+        timeField.setText(timeString);
+    }
+
+    Thread clockUpdateThread = new Thread() {
+
+        @Override
+        public void run() {
+            try {
+                while (!isInterrupted()) {
+                    Thread.sleep(1000);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                           clockUpdate();
+                        }
+                    });
+                }
+            } catch (InterruptedException e) {
+            }
+        }
+    };
 
 
 
