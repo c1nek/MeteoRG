@@ -128,14 +128,15 @@ public class MainActivity extends FragmentActivity {
     
     public String createFlickrTags(){
         String tagsString = null;
-        if(WeatherObject.weatherUpdateTime.getTime() > WeatherObject.sunsetTime.getTime() && WeatherObject.weatherUpdateTime.getTime() < WeatherObject.sunriseTime.getTime())
-        {
-            tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
-        }
-        else
-        {
+        //////////CALY CZAS CIEMNO, BO UPDATETIME ZWRACA W UTC////////////////
+        //if(WeatherObject.weatherUpdateTime.getTime() > WeatherObject.sunsetTime.getTime() && WeatherObject.weatherUpdateTime.getTime() < WeatherObject.sunriseTime.getTime())
+        //{
+           // tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
+        //}
+        //else
+        //{
             tagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
-        }
+        //}
         return tagsString;
     }
 

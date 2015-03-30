@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Date;
 
 /**
  * Created by Marcin on 2015-03-23.
@@ -36,9 +37,9 @@ public class weather {
         String conditionsShort = null;
 
     //weather times UTC//
-        int weatherUpdateTime = 0;
-        int sunriseTime = 0;
-        int sunsetTime = 0;
+        Date weatherUpdateTime;
+        Date sunriseTime;
+        Date sunsetTime;
 
     public weather(String tags){
         this.tags = tags;
@@ -93,8 +94,8 @@ public class weather {
             JSONObject JsonObject = new JSONObject(json);
 
             JSONObject JSONObject_sys = JsonObject.getJSONObject("sys");
-                sunriseTime = JSONObject_sys.getInt("sunrise");
-                sunsetTime = JSONObject_sys.getInt("sunset");
+                sunriseTime = new Date(JSONObject_sys.getInt("sunrise"));
+                sunsetTime = new Date(JSONObject_sys.getInt("sunset"));
 
             JSONArray JSONArray_weather = JsonObject.getJSONArray("weather");
             JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
@@ -110,13 +111,14 @@ public class weather {
 
 
 
-               weatherUpdateTime = JsonObject.getInt("dt");
+               weatherUpdateTime = new Date(JsonObject.getInt("dt"));
 
 
           } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 
 
 
