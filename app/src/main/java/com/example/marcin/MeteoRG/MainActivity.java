@@ -9,24 +9,95 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.Vibrator;
 
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
+
+    ArrayList<String> resultList;
+
+    Context mContext;
+    int mResource;
+
+    PlaceAPI mPlaceAPI = new PlaceAPI();
+
+    public PlacesAutoCompleteAdapter(Context context, int resource) {
+        super(context, resource);
+
+        mContext = context;
+        mResource = resource;
+    }
+
+    @Override
+    public int getCount() {
+        // Last item will be the footer
+        return resultList.size();
+    }
+
+    @Override
+    public String getItem(int position) {
+        return resultList.get(position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if (constraint != null) {
+                    resultList = mPlaceAPI.autocomplete(constraint.toString());
+
+                    filterResults.values = resultList;
+                    filterResults.count = resultList.size();
+                }
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (results != null && results.count > 0) {
+                    notifyDataSetChanged();
+                }
+                else {
+                    notifyDataSetInvalidated();
+                }
+            }
+        };
+
+        return filter;
+    }
+}
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -40,7 +111,7 @@ public class MainActivity extends FragmentActivity {
     ImageButton searchButton;
     ImageButton backButton;
 
-    EditText searchText;
+    AutoCompleteTextView searchText;
     public TextView addressField, timeField;
     ImageView imageFlickrPhoto;
     //*****************//
@@ -109,7 +180,9 @@ public class MainActivity extends FragmentActivity {
 
 
 
-        searchText = (EditText) findViewById(R.id.searchEditText);
+        searchText = (AutoCompleteTextView) findViewById(R.id.searchEditText);
+        searchText.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
+
 
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
         addressField = (TextView) findViewById(R.id.gpscity);
@@ -138,6 +211,9 @@ public class MainActivity extends FragmentActivity {
         ViewPager pager = (ViewPager) super.findViewById(R.id.pager);
         pager.setAdapter(this.mPagerAdapter);
     }
+
+
+    ////////BUTTONS///////////
 
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
@@ -196,6 +272,14 @@ public class MainActivity extends FragmentActivity {
         vibra = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibra.vibrate(time);
     }
+
+    public void startOnMyLocation (){}
+
+    public void refreshOnActualLocation() {}
+
+    public void searchLocation() {}
+
+    ///////////////END BUTTONS///////////////
 
     public void letTheShowBegin(){
 
