@@ -32,13 +32,12 @@ public class gps extends Service implements LocationListener{
     boolean SIEC_WLACZONA = false;
 
     Location location = null;
-    Location lastKnownLocation = null;
 
     double latitude;
     double longitude;
 
-    String City = " ";
-    String Country = " ";
+    String City = "";
+    String Country = "";
 
     // odleglosc do update (metry)
     private static final long MIN_ODLEGLOSC = 1000;

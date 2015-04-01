@@ -21,40 +21,34 @@ import java.util.Date;
  */
 public class weather {
 
-        String URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-        String tags = null;
-        String searchResult = null;
-        String JSONResult = null;
+
+    String format = ".json";
 
     //weather deatils strings//
-        int temp= 0;
-        int tempMax = 0;
-        int tempMin = 0;
-        int pressure = 0;
-        int humidity = 0;
-        String city = null;
-        String conditions = null;
-        String conditionsShort = null;
+    int temp = 0;
+    int tempMax = 0;
+    int tempMin = 0;
+    int pressure = 0;
+    String humidity = null;
+    String conditions = null;
+    String conditionsShort = "rain";
 
     //weather times UTC//
-        Date weatherUpdateTime;
-        Date sunriseTime;
-        Date sunsetTime;
+    int sunriseTimeMin = 0;
+    int sunriseTimeHour = 0;
+    int sunsetTimeMin = 0;
+    int sunsetTimeHour = 0;
 
-    public weather(String tags){
-        this.tags = tags;
-        ParseJSON(QueryWeather(tags));
+    public weather(double lat, double lng) {
+        String tags= String.valueOf(lat) + "," + String.valueOf(lng);
+        ParseJSON(QueryWeather(tags), QueryAstronomy(tags));
     }
 
-    private String QueryWeather(String q){
-
+    private String QueryAstronomy(String q){
         String qResult = null;
+        String URL = "http://api.wunderground.com/api/abd32b1ab11c6808/astronomy/q/";
 
-        String lang = "&lang=pl";
-        String units = "&units=metric";
-
-        String qString =
-                URL + q + units + lang;
+        String qString = URL + q + format;
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
@@ -62,7 +56,7 @@ public class weather {
         try {
             HttpEntity httpEntity = httpClient.execute(httpGet).getEntity();
 
-            if (httpEntity != null){
+            if (httpEntity != null) {
                 InputStream inputStream = httpEntity.getContent();
                 Reader in = new InputStreamReader(inputStream);
                 BufferedReader bufferedreader = new BufferedReader(in);
@@ -85,41 +79,85 @@ public class weather {
 
             e.printStackTrace();
         }
-        JSONResult = qResult;
-        return qResult;}
+        return qResult;
+    }
 
-    private void ParseJSON(String json) {
+    private String QueryWeather(String q) {
+
+        String URL = "http://api.wunderground.com/api/abd32b1ab11c6808/conditions/lang:PL/q/";
+        String tags = q;
+
+        String qResult = null;
+
+        String qString = URL + tags + format;
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(qString);
 
         try {
-            JSONObject JsonObject = new JSONObject(json);
+            HttpEntity httpEntity = httpClient.execute(httpGet).getEntity();
 
-            JSONObject JSONObject_sys = JsonObject.getJSONObject("sys");
-                sunriseTime = new Date(JSONObject_sys.getInt("sunrise"));
-                sunsetTime = new Date(JSONObject_sys.getInt("sunset"));
+            if (httpEntity != null) {
+                InputStream inputStream = httpEntity.getContent();
+                Reader in = new InputStreamReader(inputStream);
+                BufferedReader bufferedreader = new BufferedReader(in);
+                StringBuilder stringBuilder = new StringBuilder();
 
-            JSONArray JSONArray_weather = JsonObject.getJSONArray("weather");
-            JSONObject JSONObject_weather = JSONArray_weather.getJSONObject(0);
-                conditionsShort = JSONObject_weather.getString("main");
-                conditions = JSONObject_weather.getString("description");
+                String stringReadLine = null;
 
-            JSONObject JSONObject_main = JsonObject.getJSONObject("main");
-                temp = (JSONObject_main.getInt("temp"));
-                pressure = JSONObject_main.getInt("pressure");
-                tempMin= JSONObject_main.getInt("temp_min");
-                tempMax= JSONObject_main.getInt("temp_max");
-                humidity = JSONObject_main.getInt("humidity");
+                while ((stringReadLine = bufferedreader.readLine()) != null) {
+                    stringBuilder.append(stringReadLine + "\n");
+                }
 
+                qResult = stringBuilder.toString();
 
+            }
 
-               weatherUpdateTime = new Date(JsonObject.getInt("dt"));
+        } catch (ClientProtocolException e) {
 
+            e.printStackTrace();
+        } catch (IOException e) {
 
-          } catch (JSONException e) {
             e.printStackTrace();
         }
+        return qResult;
     }
 
 
+    // TODO jebnac wontki
+
+    private void ParseJSON(String jsonW, String jsonA) {
+
+        try {
+            JSONObject JsonObjectW = new JSONObject(jsonW);
+
+           // JSONObject JSONObject_response = JsonObject.getJSONObject("response");
+
+            JSONObject JSONObject_current_observation = JsonObjectW.getJSONObject("current_observation");
+                temp = (JSONObject_current_observation.getInt("temp_c"));
+                pressure = JSONObject_current_observation.getInt("pressure_mb");
+                humidity = JSONObject_current_observation.getString("relative_humidity");
+                conditions = JSONObject_current_observation.getString("weather");
+
+            JSONObject JsonObjectA = new JSONObject(jsonA);
+                JSONObject JSONObject_sun_phase = JsonObjectA.getJSONObject("sun_phase");
+                    JSONObject JSONObject_sunrise = JSONObject_sun_phase.getJSONObject("sunrise");
+                        sunriseTimeHour = JSONObject_sunrise.getInt("hour");
+                        sunriseTimeMin = JSONObject_sunrise.getInt("minute");
+                    JSONObject JSONObject_sunset = JSONObject_sun_phase.getJSONObject("sunset");
+                        sunsetTimeHour = JSONObject_sunset.getInt("hour");
+                        sunsetTimeMin = JSONObject_sunset.getInt("minute");
 
 
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+
+
+
+

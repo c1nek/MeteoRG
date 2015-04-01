@@ -16,11 +16,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+
+import android.util.Log;
 
 public class MainActivity extends FragmentActivity {
 
@@ -55,6 +58,17 @@ public class MainActivity extends FragmentActivity {
     Date time = null;
     String timeString = null;
 
+
+    long stoperStrat;
+    long stoperStop;
+
+    //threads//
+   // Thread clockUpdateThread;
+   // Thread getGpsObject;
+   // Thread getTimeZoneThread;
+   // Thread getWeatherObject;
+   // Thread getFlickrObject;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +81,11 @@ public class MainActivity extends FragmentActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
+        stoperStrat = System.currentTimeMillis();
+
         LocationObject = new gps(this);
+
+        Log.i("info", "Utworzono location object");
 
         refreshButton = (ImageButton)findViewById(R.id.Refresh);
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
@@ -75,10 +93,12 @@ public class MainActivity extends FragmentActivity {
         timeField = (TextView) findViewById(R.id.time);
         refreshButton.setOnClickListener(refreshButtonOnClickListener);
 
+        clockUpdateThread.start();
+
         letTheShowBegin();
         this.initialisePaging();
-
-
+        stoperStop= System.currentTimeMillis();
+        Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat)/1000));
     }
 
     public weather getwWather(){
@@ -96,14 +116,14 @@ public class MainActivity extends FragmentActivity {
         pager.setAdapter(this.mPagerAdapter);
     }
 
-
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
+            //clockUpdateThread.stop();
             letTheShowBegin();
 
            // basicFragment = (basic_weather_layout) getSupportFragmentManager().findFragmentById(R.id.);
-
+//TODO odwolanie do metod na fragmencie
             //basicFragment.fillWithData();
 
            // detailsFragment = (details_weather_layout) getSupportFragmentManager().findFragmentByTag("frag2");
@@ -120,12 +140,23 @@ public class MainActivity extends FragmentActivity {
 
     public void letTheShowBegin(){
 
+
+
         refreshLocation();
 
-        WeatherObject = new weather(clearString(LocationObject.City));
+        Log.i("info", "zdefinowano weather object");
+
+        createWeatherObject();
+
+        Log.i("info", "zainicjalizowano weather object");
 
         FlickrTags = createFlickrTags();
+
+        Log.i("info", "zdefinowano flickr object");
+
         FlickrObject = new flickr(FlickrTags);
+
+        Log.i("info", "zainicjalizowano flickr object");
 
         if (FlickrObject.bmFlickr != null){
             imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
@@ -133,13 +164,24 @@ public class MainActivity extends FragmentActivity {
         else{
             FlickrObject = new flickr(WeatherObject.conditionsShort);
         }
-        clockUpdateThread.start();
+
+
     }
-    
+
+    private void createWeatherObject(){
+        WeatherObject = new weather(LocationObject.latitude, LocationObject.longitude);
+    }
+
+    private void createFlickrObject(){
+
+
+
+    }
+
     public String createFlickrTags(){
         String tagsString = null;
         //////////CALY CZAS CIEMNO, BO UPDATETIME ZWRACA W UTC////////////////
-        //if(WeatherObject.weatherUpdateTime.getTime() > WeatherObject.sunsetTime.getTime() && WeatherObject.weatherUpdateTime.getTime() < WeatherObject.sunriseTime.getTime())
+        //if(WeatherObject.weatherUpdateTime > WeatherObject.sunsetTime && WeatherObject.weatherUpdateTime < WeatherObject.sunriseTime)
         //{
            tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
         //}
@@ -151,7 +193,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void refreshLocation(){
+        Log.i("info", "pobieranie lokalizacji");
         LocationObject.getLocation();
+        Log.i("info", "pobranie lokalizacji");
         addressField.setText(LocationObject.City + ", " + LocationObject.Country);
     }
 
@@ -202,6 +246,17 @@ public class MainActivity extends FragmentActivity {
             } catch (InterruptedException e) {
             }
         }
+    };
+
+    Thread FlickrObjectThread = new Thread() {
+
+        @Override
+        public void run() {
+            Log.i("info", "start getWeatherObject");
+            createFlickrObject();
+            Log.i("info", "end getWeatherObject");
+        }
+
     };
 
 

@@ -32,15 +32,12 @@ public class flickr {
     String FlickrQuery_format = "&format=json";
     String FlickrQuery_tag = "&tags=";
     String FlickrQuery_key = "&api_key=";
-    String FlickrApiKey = "64c0f179f8aec0444033c8b2c57a7db0";
+    String FlickrApiKey = "291c27e07717022ef03bb4bcd00220ed";
     String FlickrSort = "&sort=interestingness-desc";
     String FlickrContentType = "&content_type=1";
-    String lat, lon;
     //*****************//
     String Tags;
     String searchResult;
-    String jsonResult;
-
 
     Bitmap bmFlickr;
 
@@ -144,7 +141,7 @@ public class flickr {
 
         String FlickrPhotoPath =
                 "http://farm" + farm + ".static.flickr.com/"
-                        + server + "/" + id + "_" + secret + "_b.jpg";
+                        + server + "/" + id + "_" + secret + "_c.jpg";
 
         URL FlickrPhotoUrl = null;
 
