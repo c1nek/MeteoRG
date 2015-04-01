@@ -3,4 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:id="@+id/autocompleteText" />
+    android:id="@+id/autocompleteText"
+    android:alpha="0.5"
+    android:background="#ff000000"
+    android:textColor="#ffffffff" />

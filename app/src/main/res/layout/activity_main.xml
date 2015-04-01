@@ -117,29 +117,19 @@
             android:alpha="0.5"
             android:visibility="invisible" />
 
-        <ImageButton
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/search"
-            android:layout_gravity="right|top"
-            android:background="@drawable/search_icon"
-            android:alpha="0.5"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:visibility="invisible" />
-
         <AutoCompleteTextView
-            android:layout_width="245dp"
+            android:layout_width="294dp"
             android:layout_height="wrap_content"
             android:id="@+id/searchEditText"
-            android:layout_gravity="center_horizontal|top"
+            android:layout_gravity="top|center_horizontal|right"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="17dp"
             android:layout_marginRight="10dp"
             android:maxLines="1"
             android:visibility="invisible"
             android:hint="Podaj lokalizację"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff"
+            android:textSize="14dp" />
 
     </FrameLayout>
 

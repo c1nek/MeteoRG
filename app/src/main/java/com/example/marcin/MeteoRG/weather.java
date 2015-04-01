@@ -147,10 +147,6 @@ public class weather {
                     JSONObject JSONObject_sunset = JSONObject_sun_phase.getJSONObject("sunset");
                         sunsetTimeHour = JSONObject_sunset.getInt("hour");
                         sunsetTimeMin = JSONObject_sunset.getInt("minute");
-
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -140,8 +140,7 @@ public class flickr {
         Bitmap bm= null;
 
         String FlickrPhotoPath =
-                "http://farm" + farm + ".static.flickr.com/"
-                        + server + "/" + id + "_" + secret + "_c.jpg";
+                "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + "_c.jpg";
 
         URL FlickrPhotoUrl = null;
 
@@ -154,12 +153,9 @@ public class flickr {
             httpConnection.connect();
             InputStream inputStream = httpConnection.getInputStream();
             bm = BitmapFactory.decodeStream(inputStream);
-
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         bmFlickr = bm;

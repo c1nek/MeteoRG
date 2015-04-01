@@ -14,6 +14,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +37,14 @@ import java.util.List;
 import java.util.Vector;
 
 import android.util.Log;
+import android.widget.Toast;
+
+
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,14 +112,21 @@ class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterab
 
 public class MainActivity extends FragmentActivity {
 
+
+    //weather & location types//
+    double globalLat;
+    double globalLen;
+    String globalCity;
+    String globalCountry;
+
     //pager adapter//
     private PagerAdapter mPagerAdapter;
     //*****************//
 
+
     //layout types//
     ImageButton refreshButton;
     ImageButton locationButton;
-    ImageButton searchButton;
     ImageButton backButton;
 
     AutoCompleteTextView searchText;
@@ -127,6 +145,9 @@ public class MainActivity extends FragmentActivity {
     public static weather WeatherObject;
 
     //fragment types//
+    List<Fragment> fragments;
+    int id1, id2;
+
     basic_weather_layout basicFragment;
     details_weather_layout detailsFragment;
 
@@ -142,18 +163,18 @@ public class MainActivity extends FragmentActivity {
     long stoperStop;
 
     //threads//
-   // Thread clockUpdateThread;
-   // Thread getGpsObject;
-   // Thread getTimeZoneThread;
-   // Thread getWeatherObject;
-   // Thread getFlickrObject;
+    // Thread clockUpdateThread;
+    // Thread getGpsObject;
+    // Thread getTimeZoneThread;
+    // Thread getWeatherObject;
+    // Thread getFlickrObject;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -162,54 +183,95 @@ public class MainActivity extends FragmentActivity {
 
         stoperStrat = System.currentTimeMillis();
 
-        LocationObject = new gps(this);
-
         Log.i("info", "Utworzono location object");
 
-        refreshButton = (ImageButton)findViewById(R.id.Refresh);
+        refreshButton = (ImageButton) findViewById(R.id.Refresh);
         refreshButton.setOnClickListener(refreshButtonOnClickListener);
 
         locationButton = (ImageButton) findViewById(R.id.locationButton);
         locationButton.setOnClickListener(locationButtonOnClickListener);
         locationButton.setOnLongClickListener(locationButtonOnLongClickListener);
 
-        searchButton = (ImageButton) findViewById(R.id.search);
-
         backButton = (ImageButton) findViewById(R.id.back);
         backButton.setOnClickListener(backButtonOnClickListener);
-
-
 
         searchText = (AutoCompleteTextView) findViewById(R.id.searchEditText);
         searchText.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
 
+        searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String str = (String) adapterView.getItemAtPosition(position);
+                vibra(50);
+                Log.i("!!!!!!!", str);
+                try
+                {
+                    LocationObject.getCoord(str);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                globalLat = LocationObject.latitude;
+                globalLen = LocationObject.longitude;
 
-        imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
+                LocationObject.getCity(globalLat, globalLen);
+
+                globalCity = LocationObject.City;
+                globalCountry = LocationObject.Country;
+                Log.i("!!!!!!!", globalCity + " " +globalCountry );
+
+                searchText.setVisibility(View.INVISIBLE);
+                backButton.setVisibility(View.INVISIBLE);
+                locationButton.setVisibility(View.VISIBLE);
+                refreshButton.setVisibility(View.VISIBLE);
+                addressField.setVisibility(View.VISIBLE);
+                timeField.setVisibility(View.VISIBLE);
+
+                getWeather();
+                setAdressField(globalCity + ", " + globalCountry);
+                getFlickr();
+                hideKeybord(view);
+                fillDataFragments();
+
+
+
+
+            }
+       });
+
+
+        imageFlickrPhoto = (ImageView) findViewById(R.id.flickrPhoto);
         addressField = (TextView) findViewById(R.id.gpscity);
         timeField = (TextView) findViewById(R.id.time);
-
 
         clockUpdateThread.start();
 
         letTheShowBegin();
         this.initialisePaging();
-        stoperStop= System.currentTimeMillis();
-        Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat)/1000));
+        stoperStop = System.currentTimeMillis();
+        Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat) / 1000));
     }
 
-    public weather getwWather(){
+    public weather getwWather() {
         return WeatherObject;
     }
 
     private void initialisePaging() {
 
-        List<Fragment> fragments = new Vector<Fragment>();
+        fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this, basic_weather_layout.class.getName()));
         fragments.add(Fragment.instantiate(this, details_weather_layout.class.getName()));
 
         this.mPagerAdapter = new myPageAdapter(super.getSupportFragmentManager(), fragments);
         ViewPager pager = (ViewPager) super.findViewById(R.id.pager);
         pager.setAdapter(this.mPagerAdapter);
+
+        Fragment fragment1 = fragments.get(0);
+        id1 = fragment1.getId();
+
+        Fragment fragment2 = fragments.get(1);
+        id2 = fragment1.getId();
     }
 
 
@@ -218,23 +280,13 @@ public class MainActivity extends FragmentActivity {
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
-            letTheShowBegin();
-           // basicFragment = (basic_weather_layout) getSupportFragmentManager().findFragmentById(R.id.);
-            //TODO odwolanie do metod na fragmencie
-            //basicFragment.fillWithData();
-
-           // detailsFragment = (details_weather_layout) getSupportFragmentManager().findFragmentByTag("frag2");
-           // detailsFragment.fillWithData();
         }
     };
 
     private Button.OnClickListener locationButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
-            //letTheShowBegin();
         }
-
-
     };
 
     private Button.OnLongClickListener locationButtonOnLongClickListener = new Button.OnLongClickListener() {
@@ -242,14 +294,12 @@ public class MainActivity extends FragmentActivity {
             vibra(50);
             searchText.setVisibility(View.VISIBLE);
             backButton.setVisibility(View.VISIBLE);
-            searchButton.setVisibility(View.VISIBLE);
             locationButton.setVisibility(View.INVISIBLE);
             refreshButton.setVisibility(View.INVISIBLE);
             addressField.setVisibility(View.INVISIBLE);
             timeField.setVisibility(View.INVISIBLE);
             //letTheShowBegin();
             return true;
-
         }
     };
 
@@ -258,86 +308,113 @@ public class MainActivity extends FragmentActivity {
             vibra(50);
             searchText.setVisibility(View.INVISIBLE);
             backButton.setVisibility(View.INVISIBLE);
-            searchButton.setVisibility(View.INVISIBLE);
             locationButton.setVisibility(View.VISIBLE);
             refreshButton.setVisibility(View.VISIBLE);
             addressField.setVisibility(View.VISIBLE);
             timeField.setVisibility(View.VISIBLE);
         }
-
-
     };
 
-    public void vibra(int time){
+
+    public void vibra(int time) {
         vibra = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibra.vibrate(time);
+        vibra.vibrate(time);
+    }
+    public void hideKeybord(View view) {
+        try  {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+
+        }
     }
 
-    public void startOnMyLocation (){}
+    public void startOnMyLocation() {
+    }
 
-    public void refreshOnActualLocation() {}
+    public void refreshOnActualLocation() {
+    }
 
-    public void searchLocation() {}
+    public void searchLocation() {
+    }
+
+
 
     ///////////////END BUTTONS///////////////
 
     public void letTheShowBegin(){
+        Log.i("info", "zdefinowano location");
+        getLocation();
+        Log.i("info", "zainicjalizowano location");
 
-        refreshLocation();
+        setAdressField(globalCity + ", " + globalCountry);
 
-        Log.i("info", "zdefinowano weather object");
+        Log.i("info", "zdefinowano weather");
+        getWeather();
+        Log.i("info", "zainicjalizowano weather");
 
-        createWeatherObject();
+        Log.i("info", "zdefinowano flickr");
+        getFlickr();
+        Log.i("info", "zainicjalizowano flickr");
+    }
 
-        Log.i("info", "zainicjalizowano weather object");
+    public void fillDataFragments(){
+        basic_weather_layout basicLayout = (basic_weather_layout) fragments.get(0);
+        basicLayout.fillWithData();
+        details_weather_layout detailLayout = (details_weather_layout) fragments.get(1);
+        detailLayout.fillWithData();
 
+
+
+    }
+
+    public void getLocation(){
+        LocationObject = new gps(this);
+        globalLat = LocationObject.latitude;
+        globalLen = LocationObject.longitude;
+        globalCity = LocationObject.City;
+        globalCountry = LocationObject.Country;
+    }
+
+    public void setLocation(String locationName){
+            }
+
+    public void getWeather(){
+        WeatherObject = new weather(globalLat, globalLen);
+    }
+    public void setDefaultBackgroung(){
+
+    }
+
+    public void getFlickr(){
         FlickrTags = createFlickrTags();
-
-        Log.i("info", "zdefinowano flickr object");
-
         FlickrObject = new flickr(FlickrTags);
-
-        Log.i("info", "zainicjalizowano flickr object");
 
         if (FlickrObject.bmFlickr != null){
             imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
         }
         else{
             FlickrObject = new flickr(WeatherObject.conditionsShort);
+            imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
         }
 
-
     }
 
-    private void createWeatherObject(){
-        WeatherObject = new weather(LocationObject.latitude, LocationObject.longitude);
-    }
-
-    private void createFlickrObject(){
 
 
-
-    }
 
     public String createFlickrTags(){
         String tagsString = null;
         //////////CALY CZAS CIEMNO, BO UPDATETIME ZWRACA W UTC////////////////
         //if(WeatherObject.weatherUpdateTime > WeatherObject.sunsetTime && WeatherObject.weatherUpdateTime < WeatherObject.sunriseTime)
         //{
-           tagsString = clearString(WeatherObject.conditionsShort+" "+LocationObject.City);
+           tagsString = clearString(WeatherObject.conditionsShort+" "+globalCity);
         //}
         //else
         //{
             //otagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
         //}
         return tagsString;
-    }
-
-    public void refreshLocation(){
-        Log.i("info", "pobieranie lokalizacji");
-        LocationObject.getLocation();
-        Log.i("info", "pobranie lokalizacji");
-        addressField.setText(LocationObject.City + ", " + LocationObject.Country);
     }
 
     public String clearString(String oldString){
@@ -361,6 +438,10 @@ public class MainActivity extends FragmentActivity {
         }
 
         return newString;
+    }
+
+    public void setAdressField(String adress){
+        addressField.setText(adress);
     }
 
     public void clockUpdate(){
@@ -388,22 +469,5 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
-
-    Thread FlickrObjectThread = new Thread() {
-
-        @Override
-        public void run() {
-            Log.i("info", "start getWeatherObject");
-            createFlickrObject();
-            Log.i("info", "end getWeatherObject");
-        }
-
-    };
-
-
-
-
-
-
 
 }

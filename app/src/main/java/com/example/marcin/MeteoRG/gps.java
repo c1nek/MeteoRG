@@ -24,6 +24,8 @@ import java.util.Locale;
  */
 public class gps extends Service implements LocationListener{
 
+    Geocoder gcd;
+
     private Context mContext = null;
 
     boolean canGetLocation = false;
@@ -113,6 +115,24 @@ public class gps extends Service implements LocationListener{
         Country = country;
         City = city;
         return city;
+    }
+
+    public void getCoord(String city) throws IOException {
+
+        Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
+
+        List<Address> addresses = null;
+
+        try {
+            addresses = gcd.getFromLocationName(city, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            latitude = addresses.get(0).getLatitude();
+            longitude = addresses.get(0).getLongitude();
+        }
+
     }
 
 
