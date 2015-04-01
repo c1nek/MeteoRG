@@ -9,7 +9,6 @@
     android:backgroundTint="#97000000"
     android:padding="0dp">
 
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -95,6 +94,56 @@
             android:layout_gravity="right|top"
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp" />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:id="@+id/locationButton"
+            android:layout_gravity="left|top"
+            android:alpha="0.5"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/location_icon" />
+
+        <EditText
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchEditText"
+            android:layout_weight="0.97"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible"
+            android:text="Wyszukaj lokalizacje"
+            android:textColor="#64ffffff"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:gravity="right"
+            android:layout_gravity="center_horizontal"
+            android:alpha="0.5" />
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/back"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/back_incon"
+            android:alpha="0.5"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/search"
+            android:layout_gravity="right|top"
+            android:background="@drawable/search_icon"
+            android:alpha="0.5"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="invisible" />
 
     </FrameLayout>
 

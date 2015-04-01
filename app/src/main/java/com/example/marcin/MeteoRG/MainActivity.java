@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.Vibrator;
 
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +36,11 @@ public class MainActivity extends FragmentActivity {
 
     //layout types//
     ImageButton refreshButton;
+    ImageButton locationButton;
+    ImageButton searchButton;
+    ImageButton backButton;
+
+    EditText searchText;
     public TextView addressField, timeField;
     ImageView imageFlickrPhoto;
     //*****************//
@@ -88,10 +96,25 @@ public class MainActivity extends FragmentActivity {
         Log.i("info", "Utworzono location object");
 
         refreshButton = (ImageButton)findViewById(R.id.Refresh);
+        refreshButton.setOnClickListener(refreshButtonOnClickListener);
+
+        locationButton = (ImageButton) findViewById(R.id.locationButton);
+        locationButton.setOnClickListener(locationButtonOnClickListener);
+        locationButton.setOnLongClickListener(locationButtonOnLongClickListener);
+
+        searchButton = (ImageButton) findViewById(R.id.search);
+
+        backButton = (ImageButton) findViewById(R.id.back);
+        backButton.setOnClickListener(backButtonOnClickListener);
+
+
+
+        searchText = (EditText) findViewById(R.id.searchEditText);
+
         imageFlickrPhoto = (ImageView)findViewById(R.id.flickrPhoto);
         addressField = (TextView) findViewById(R.id.gpscity);
         timeField = (TextView) findViewById(R.id.time);
-        refreshButton.setOnClickListener(refreshButtonOnClickListener);
+
 
         clockUpdateThread.start();
 
@@ -119,18 +142,54 @@ public class MainActivity extends FragmentActivity {
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
-            //clockUpdateThread.stop();
             letTheShowBegin();
-
            // basicFragment = (basic_weather_layout) getSupportFragmentManager().findFragmentById(R.id.);
-//TODO odwolanie do metod na fragmencie
+            //TODO odwolanie do metod na fragmencie
             //basicFragment.fillWithData();
 
            // detailsFragment = (details_weather_layout) getSupportFragmentManager().findFragmentByTag("frag2");
            // detailsFragment.fillWithData();
+        }
+    };
 
+    private Button.OnClickListener locationButtonOnClickListener = new Button.OnClickListener() {
+        public void onClick(View arg0) {
+            vibra(50);
+            //letTheShowBegin();
+        }
+
+
+    };
+
+    private Button.OnLongClickListener locationButtonOnLongClickListener = new Button.OnLongClickListener() {
+        public boolean onLongClick(View arg0) {
+            vibra(50);
+            searchText.setVisibility(View.VISIBLE);
+            backButton.setVisibility(View.VISIBLE);
+            searchButton.setVisibility(View.VISIBLE);
+            locationButton.setVisibility(View.INVISIBLE);
+            refreshButton.setVisibility(View.INVISIBLE);
+            addressField.setVisibility(View.INVISIBLE);
+            timeField.setVisibility(View.INVISIBLE);
+            //letTheShowBegin();
+            return true;
 
         }
+    };
+
+    private Button.OnClickListener backButtonOnClickListener = new Button.OnClickListener() {
+        public void onClick(View arg0) {
+            vibra(50);
+            searchText.setVisibility(View.INVISIBLE);
+            backButton.setVisibility(View.INVISIBLE);
+            searchButton.setVisibility(View.INVISIBLE);
+            locationButton.setVisibility(View.VISIBLE);
+            refreshButton.setVisibility(View.VISIBLE);
+            addressField.setVisibility(View.VISIBLE);
+            timeField.setVisibility(View.VISIBLE);
+        }
+
+
     };
 
     public void vibra(int time){
@@ -139,8 +198,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void letTheShowBegin(){
-
-
 
         refreshLocation();
 
