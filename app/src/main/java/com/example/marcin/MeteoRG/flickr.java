@@ -129,6 +129,8 @@ public class flickr {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
 
         return jResult;
@@ -136,25 +138,18 @@ public class flickr {
 
     private Bitmap LoadPhotoFromFlickr(
             String id, String owner, String secret,
-            String server, String farm, String title){
+            String server, String farm, String title) throws MalformedURLException {
         Bitmap bm= null;
 
         String FlickrPhotoPath =
                 "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + "_c.jpg";
 
-        URL FlickrPhotoUrl = null;
+        URL FlickrPhotoUrl = new URL(FlickrPhotoPath);
 
         try {
-            FlickrPhotoUrl = new URL(FlickrPhotoPath);
-
-            HttpURLConnection httpConnection
-                    = (HttpURLConnection) FlickrPhotoUrl.openConnection();
-            httpConnection.setDoInput(true);
-            httpConnection.connect();
-            InputStream inputStream = httpConnection.getInputStream();
-            bm = BitmapFactory.decodeStream(inputStream);
+            bm = BitmapFactory.decodeStream(FlickrPhotoUrl.openConnection().getInputStream());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

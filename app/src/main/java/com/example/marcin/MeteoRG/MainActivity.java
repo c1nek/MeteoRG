@@ -9,47 +9,28 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.Vibrator;
 
-import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import android.util.Log;
-import android.widget.Toast;
-
-
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
@@ -162,6 +143,8 @@ public class MainActivity extends FragmentActivity {
     long stoperStrat;
     long stoperStop;
 
+    String str;
+
     //threads//
     // Thread clockUpdateThread;
     // Thread getGpsObject;
@@ -183,8 +166,6 @@ public class MainActivity extends FragmentActivity {
 
         stoperStrat = System.currentTimeMillis();
 
-        Log.i("info", "Utworzono location object");
-
         refreshButton = (ImageButton) findViewById(R.id.Refresh);
         refreshButton.setOnClickListener(refreshButtonOnClickListener);
 
@@ -201,9 +182,10 @@ public class MainActivity extends FragmentActivity {
         searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String str = (String) adapterView.getItemAtPosition(position);
+                str = (String) adapterView.getItemAtPosition(position);
+                searchText.setText(str);
                 vibra(50);
-                Log.i("!!!!!!!", str);
+
                 try
                 {
                     LocationObject.getCoord(str);
@@ -219,7 +201,9 @@ public class MainActivity extends FragmentActivity {
 
                 globalCity = LocationObject.City;
                 globalCountry = LocationObject.Country;
-                Log.i("!!!!!!!", globalCity + " " +globalCountry );
+                Log.i("!!!!!!!", globalCity + ", " +globalCountry );
+
+                hideKeybord(view);
 
                 searchText.setVisibility(View.INVISIBLE);
                 backButton.setVisibility(View.INVISIBLE);
@@ -230,13 +214,9 @@ public class MainActivity extends FragmentActivity {
 
                 getWeather();
                 setAdressField(globalCity + ", " + globalCountry);
-                getFlickr();
+                new Thread(getFlickrThread).start();
                 hideKeybord(view);
                 fillDataFragments();
-
-
-
-
             }
        });
 
@@ -246,9 +226,8 @@ public class MainActivity extends FragmentActivity {
         timeField = (TextView) findViewById(R.id.time);
 
         clockUpdateThread.start();
-
-        letTheShowBegin();
         this.initialisePaging();
+        letTheShowBegin();
         stoperStop = System.currentTimeMillis();
         Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat) / 1000));
     }
@@ -280,12 +259,14 @@ public class MainActivity extends FragmentActivity {
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
+            new Thread(refreshOnActualLocationThread).start();
         }
     };
 
     private Button.OnClickListener locationButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
+            new Thread(startOnMyLocationThread).start();
         }
     };
 
@@ -298,6 +279,7 @@ public class MainActivity extends FragmentActivity {
             refreshButton.setVisibility(View.INVISIBLE);
             addressField.setVisibility(View.INVISIBLE);
             timeField.setVisibility(View.INVISIBLE);
+            searchText.setText("");
             //letTheShowBegin();
             return true;
         }
@@ -312,6 +294,7 @@ public class MainActivity extends FragmentActivity {
             refreshButton.setVisibility(View.VISIBLE);
             addressField.setVisibility(View.VISIBLE);
             timeField.setVisibility(View.VISIBLE);
+            hideKeybord(arg0);
         }
     };
 
@@ -320,25 +303,12 @@ public class MainActivity extends FragmentActivity {
         vibra = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibra.vibrate(time);
     }
+
     public void hideKeybord(View view) {
-        try  {
-            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        } catch (Exception e) {
-
-        }
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
     }
-
-    public void startOnMyLocation() {
-    }
-
-    public void refreshOnActualLocation() {
-    }
-
-    public void searchLocation() {
-    }
-
-
 
     ///////////////END BUTTONS///////////////
 
@@ -354,7 +324,7 @@ public class MainActivity extends FragmentActivity {
         Log.i("info", "zainicjalizowano weather");
 
         Log.i("info", "zdefinowano flickr");
-        getFlickr();
+        new Thread(getFlickrThread).start();
         Log.i("info", "zainicjalizowano flickr");
     }
 
@@ -363,9 +333,6 @@ public class MainActivity extends FragmentActivity {
         basicLayout.fillWithData();
         details_weather_layout detailLayout = (details_weather_layout) fragments.get(1);
         detailLayout.fillWithData();
-
-
-
     }
 
     public void getLocation(){
@@ -376,31 +343,12 @@ public class MainActivity extends FragmentActivity {
         globalCountry = LocationObject.Country;
     }
 
-    public void setLocation(String locationName){
-            }
-
     public void getWeather(){
         WeatherObject = new weather(globalLat, globalLen);
     }
     public void setDefaultBackgroung(){
-
+//TODO domyslne tlo dorobicz
     }
-
-    public void getFlickr(){
-        FlickrTags = createFlickrTags();
-        FlickrObject = new flickr(FlickrTags);
-
-        if (FlickrObject.bmFlickr != null){
-            imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
-        }
-        else{
-            FlickrObject = new flickr(WeatherObject.conditionsShort);
-            imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
-        }
-
-    }
-
-
 
 
     public String createFlickrTags(){
@@ -469,5 +417,53 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+
+    private Runnable getFlickrThread = new Runnable() {
+
+        public void run()
+        {
+            Log.i("Flickr", "Flickr thread start");
+            FlickrTags = createFlickrTags();
+            FlickrObject = new flickr(FlickrTags);
+
+            if (FlickrObject.bmFlickr != null) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        imageFlickrPhoto.setImageBitmap(FlickrObject.bmFlickr);
+                    }
+                });
+            }
+
+
+             else{
+                FlickrTags = WeatherObject.conditionsShort;
+               // getFlickrThread.run();
+
+               //TODO SkImageDecoder::FactoryReturnedNull DO OGARNIECIA TO DZIADOSTWO
+            }
+            Log.i("Flickr", "Flickr thread stop");
+        }
+    };
+
+    private Runnable refreshOnActualLocationThread = new Runnable() {
+
+        public void run()
+        {
+            Log.i("Refresh", "Refresh thread start");
+            getWeather();
+            fillDataFragments();
+            Log.i("Refresh", "Refresh thread stop");
+        }
+    };
+    private Runnable startOnMyLocationThread = new Runnable() {
+
+        public void run()
+        {
+            Log.i("Refresh", "My location thread start");
+            letTheShowBegin();
+            Log.i("Refresh", "My location thread stop");
+        }
+    };
+
 
 }

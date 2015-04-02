@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-
 
 /**
  * Created by Marcin on 2015-03-28.
