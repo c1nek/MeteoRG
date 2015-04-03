@@ -24,6 +24,7 @@ public class basic_weather_layout extends Fragment{
         tempField = (TextView) mainView.findViewById(R.id.temp);
         descriptionField = (TextView) mainView.findViewById(R.id.description);
 
+        WeatherObjectFragment1 = ((MainActivity)getActivity()).getwWather();
         fillWithData();
 
         return mainView;
@@ -32,7 +33,7 @@ public class basic_weather_layout extends Fragment{
 
     public void fillWithData()
     {
-        WeatherObjectFragment1 = ((MainActivity)getActivity()).getwWather();
+        //WeatherObjectFragment1 = ((MainActivity)getActivity()).getwWather();
         try {
             tempField.setText((Integer.toString(WeatherObjectFragment1.temp)) + "\u00b0" + "C");
             descriptionField.setText(WeatherObjectFragment1.conditions);

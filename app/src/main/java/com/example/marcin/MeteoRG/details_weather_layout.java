@@ -23,6 +23,7 @@ public class details_weather_layout extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.details_weather, container, false);
 
+
         maxtempField = (TextView) mainView.findViewById(R.id.maxTemp);
         mintempField = (TextView) mainView.findViewById(R.id.minTemp);
         humFiled = (TextView) mainView.findViewById(R.id.hum);
@@ -30,6 +31,8 @@ public class details_weather_layout extends Fragment{
         sunsetTimeField = (TextView) mainView.findViewById(R.id.sunset);
         sunriceTimeFiled = (TextView) mainView.findViewById(R.id.sunrise);
 
+
+        WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
         fillWithData();
 
         return mainView;
@@ -37,15 +40,16 @@ public class details_weather_layout extends Fragment{
 
     public void fillWithData()
     {
-        WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
+
         try {
+
             mintempField.setText((Integer.toString(WeatherObjectFragment2.tempMin)) + "\u00b0" + "C");
             maxtempField.setText((Integer.toString(WeatherObjectFragment2.tempMax)) + "\u00b0" + "C");
             humFiled.setText(WeatherObjectFragment2.humidity);
             pressField.setText((Integer.toString(WeatherObjectFragment2.pressure)) + " hPa");
 
             String formattedSunsetDate = WeatherObjectFragment2.sunsetTimeHour + ":" + WeatherObjectFragment2.sunsetTimeMin;
-            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + WeatherObjectFragment2.sunriseTimeMin;
+            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + WeatherObjectFragment2.sunsetTimeMin;
 
             sunsetTimeField.setText(formattedSunriceDate);
             sunriceTimeFiled.setText(formattedSunsetDate);

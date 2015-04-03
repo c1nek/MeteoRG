@@ -99,6 +99,7 @@ public class MainActivity extends FragmentActivity {
     double globalLen;
     String globalCity;
     String globalCountry;
+    String adress;
 
     //pager adapter//
     private PagerAdapter mPagerAdapter;
@@ -226,8 +227,9 @@ public class MainActivity extends FragmentActivity {
         timeField = (TextView) findViewById(R.id.time);
 
         clockUpdateThread.start();
-        this.initialisePaging();
         letTheShowBegin();
+        this.initialisePaging();
+        fillDataFragments();
         stoperStop = System.currentTimeMillis();
         Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat) / 1000));
     }
@@ -315,12 +317,19 @@ public class MainActivity extends FragmentActivity {
     public void letTheShowBegin(){
         Log.i("info", "zdefinowano location");
         getLocation();
+
         Log.i("info", "zainicjalizowano location");
 
-        setAdressField(globalCity + ", " + globalCountry);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                setAdressField(globalCity + ", " + globalCountry);
+            }});
 
         Log.i("info", "zdefinowano weather");
+        runOnUiThread(new Runnable() {
+            public void run() {
         getWeather();
+            }});
         Log.i("info", "zainicjalizowano weather");
 
         Log.i("info", "zdefinowano flickr");
@@ -389,6 +398,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void setAdressField(String adress){
+        addressField.setText(adress);
+    }
+    public void setAdressFieldA(){
         addressField.setText(adress);
     }
 
@@ -461,6 +473,7 @@ public class MainActivity extends FragmentActivity {
         {
             Log.i("Refresh", "My location thread start");
             letTheShowBegin();
+            fillDataFragments();
             Log.i("Refresh", "My location thread stop");
         }
     };
