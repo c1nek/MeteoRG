@@ -119,12 +119,13 @@ public class MainActivity extends FragmentActivity {
     //location types//
     gps LocationObject;
 
+
     //flickr types//
     flickr FlickrObject;
     String FlickrTags;
 
     //weather//
-    public static weather WeatherObject;
+    weather WeatherObject;
 
     //fragment types//
     List<Fragment> fragments;
@@ -167,6 +168,10 @@ public class MainActivity extends FragmentActivity {
 
         stoperStrat = System.currentTimeMillis();
 
+        imageFlickrPhoto = (ImageView) findViewById(R.id.flickrPhoto);
+        addressField = (TextView) findViewById(R.id.gpscity);
+        timeField = (TextView) findViewById(R.id.time);
+
         refreshButton = (ImageButton) findViewById(R.id.Refresh);
         refreshButton.setOnClickListener(refreshButtonOnClickListener);
 
@@ -186,7 +191,7 @@ public class MainActivity extends FragmentActivity {
                 str = (String) adapterView.getItemAtPosition(position);
                 searchText.setText(str);
                 vibra(50);
-
+                hideKeybord(view);
                 try
                 {
                     LocationObject.getCoord(str);
@@ -197,14 +202,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 globalLat = LocationObject.latitude;
                 globalLen = LocationObject.longitude;
-
-                LocationObject.getCity(globalLat, globalLen);
-
                 globalCity = LocationObject.City;
                 globalCountry = LocationObject.Country;
-                Log.i("!!!!!!!", globalCity + ", " +globalCountry );
-
-                hideKeybord(view);
 
                 searchText.setVisibility(View.INVISIBLE);
                 backButton.setVisibility(View.INVISIBLE);
@@ -213,23 +212,22 @@ public class MainActivity extends FragmentActivity {
                 addressField.setVisibility(View.VISIBLE);
                 timeField.setVisibility(View.VISIBLE);
 
+
                 getWeather();
-                setAdressField(globalCity + ", " + globalCountry);
-                new Thread(getFlickrThread).start();
-                hideKeybord(view);
+                setActivityFields();
                 fillDataFragments();
+                new Thread(getFlickrThread).start();
             }
        });
 
-
-        imageFlickrPhoto = (ImageView) findViewById(R.id.flickrPhoto);
-        addressField = (TextView) findViewById(R.id.gpscity);
-        timeField = (TextView) findViewById(R.id.time);
-
         clockUpdateThread.start();
-        letTheShowBegin();
+
         this.initialisePaging();
-        fillDataFragments();
+        getLocation();
+        setActivityFields();
+        getWeather();
+        Log.i("pogoda", WeatherObject.pressure + "hPa");
+        new Thread(getFlickrThread).start();
         stoperStop = System.currentTimeMillis();
         Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat) / 1000));
     }
@@ -261,14 +259,22 @@ public class MainActivity extends FragmentActivity {
     private Button.OnClickListener refreshButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
-            new Thread(refreshOnActualLocationThread).start();
+            getWeather();
+            fillDataFragments();
+            new Thread(getFlickrThread).start();
+            //new Thread(refreshOnActualLocationThread).start();
         }
     };
 
     private Button.OnClickListener locationButtonOnClickListener = new Button.OnClickListener() {
         public void onClick(View arg0) {
             vibra(50);
-            new Thread(startOnMyLocationThread).start();
+            getLocation();
+            setActivityFields();
+            getWeather();
+            fillDataFragments();
+            new Thread(getFlickrThread).start();
+            //new Thread(startOnMyLocationThread).start();
         }
     };
 
@@ -313,37 +319,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     ///////////////END BUTTONS///////////////
-
-    public void letTheShowBegin(){
-        Log.i("info", "zdefinowano location");
-        getLocation();
-
-        Log.i("info", "zainicjalizowano location");
-
-        runOnUiThread(new Runnable() {
-            public void run() {
-                setAdressField(globalCity + ", " + globalCountry);
-            }});
-
-        Log.i("info", "zdefinowano weather");
-        runOnUiThread(new Runnable() {
-            public void run() {
-        getWeather();
-            }});
-        Log.i("info", "zainicjalizowano weather");
-
-        Log.i("info", "zdefinowano flickr");
-        new Thread(getFlickrThread).start();
-        Log.i("info", "zainicjalizowano flickr");
-    }
-
-    public void fillDataFragments(){
-        basic_weather_layout basicLayout = (basic_weather_layout) fragments.get(0);
-        basicLayout.fillWithData();
-        details_weather_layout detailLayout = (details_weather_layout) fragments.get(1);
-        detailLayout.fillWithData();
-    }
-
     public void getLocation(){
         LocationObject = new gps(this);
         globalLat = LocationObject.latitude;
@@ -352,25 +327,31 @@ public class MainActivity extends FragmentActivity {
         globalCountry = LocationObject.Country;
     }
 
+    public void setActivityFields(){
+        addressField.setText(globalCity+ ", "+globalCountry);
+    }
+
     public void getWeather(){
         WeatherObject = new weather(globalLat, globalLen);
     }
+
+
+    public void fillDataFragments(){
+        basic_weather_layout basicLayout = (basic_weather_layout) fragments.get(0);
+        basicLayout.fillWithData();
+        details_weather_layout detailLayout = (details_weather_layout) fragments.get(1);
+        detailLayout.fillWithData();
+    }
+
     public void setDefaultBackgroung(){
 //TODO domyslne tlo dorobicz
     }
 
-
     public String createFlickrTags(){
         String tagsString = null;
-        //////////CALY CZAS CIEMNO, BO UPDATETIME ZWRACA W UTC////////////////
-        //if(WeatherObject.weatherUpdateTime > WeatherObject.sunsetTime && WeatherObject.weatherUpdateTime < WeatherObject.sunriseTime)
-        //{
+
            tagsString = clearString(WeatherObject.conditionsShort+" "+globalCity);
-        //}
-        //else
-        //{
-            //otagsString = clearString(WeatherObject.conditionsShort+",night"+" "+LocationObject.City);
-        //}
+
         return tagsString;
     }
 
@@ -397,20 +378,13 @@ public class MainActivity extends FragmentActivity {
         return newString;
     }
 
-    public void setAdressField(String adress){
-        addressField.setText(adress);
-    }
-    public void setAdressFieldA(){
-        addressField.setText(adress);
-    }
-
     public void clockUpdate(){
         time = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         timeString = sdf.format(time);
         timeField.setText(timeString);
     }
-
+//TODO  ZAKTUALIZOWAC CZAS PRZY ZMIANIE LOKALIZACJI
     Thread clockUpdateThread = new Thread() {
 
         @Override
@@ -445,10 +419,9 @@ public class MainActivity extends FragmentActivity {
                     }
                 });
             }
-
-
              else{
                 FlickrTags = WeatherObject.conditionsShort;
+                new Thread(getFlickrThread).start();
                // getFlickrThread.run();
 
                //TODO SkImageDecoder::FactoryReturnedNull DO OGARNIECIA TO DZIADOSTWO
@@ -456,27 +429,4 @@ public class MainActivity extends FragmentActivity {
             Log.i("Flickr", "Flickr thread stop");
         }
     };
-
-    private Runnable refreshOnActualLocationThread = new Runnable() {
-
-        public void run()
-        {
-            Log.i("Refresh", "Refresh thread start");
-            getWeather();
-            fillDataFragments();
-            Log.i("Refresh", "Refresh thread stop");
-        }
-    };
-    private Runnable startOnMyLocationThread = new Runnable() {
-
-        public void run()
-        {
-            Log.i("Refresh", "My location thread start");
-            letTheShowBegin();
-            fillDataFragments();
-            Log.i("Refresh", "My location thread stop");
-        }
-    };
-
-
 }

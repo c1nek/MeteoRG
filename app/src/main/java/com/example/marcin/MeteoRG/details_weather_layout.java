@@ -31,7 +31,6 @@ public class details_weather_layout extends Fragment{
         sunsetTimeField = (TextView) mainView.findViewById(R.id.sunset);
         sunriceTimeFiled = (TextView) mainView.findViewById(R.id.sunrise);
 
-
         WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
         fillWithData();
 
@@ -40,9 +39,8 @@ public class details_weather_layout extends Fragment{
 
     public void fillWithData()
     {
-
         try {
-
+            WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
             mintempField.setText((Integer.toString(WeatherObjectFragment2.tempMin)) + "\u00b0" + "C");
             maxtempField.setText((Integer.toString(WeatherObjectFragment2.tempMax)) + "\u00b0" + "C");
             humFiled.setText(WeatherObjectFragment2.humidity);

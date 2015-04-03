@@ -62,9 +62,9 @@ public class weather {
 
         tags= String.valueOf(lat) + "," + String.valueOf(lng);
         android.util.Log.i("weather", "q1");
-        new Thread(astronomyThread).start();
+        ParseJSONAstronomy(QueryWeather(astronomyQuery + tags + format));
         android.util.Log.i("weather", "q2");
-        new Thread(conditionsThread).start();
+        ParseJSONCondistios(QueryWeather(conditionsQuery + tags + format));
         android.util.Log.i("weather", "f");
         //ParseJSONForecast(QueryWeather(conditionsQuery + tags + format));
     }
@@ -143,6 +143,7 @@ public class weather {
             pressure = JSONObject_current_observation.getInt("pressure_mb");
             humidity = JSONObject_current_observation.getString("relative_humidity");
             conditions = JSONObject_current_observation.getString("weather");
+            android.util.Log.i("weather: ", pressure + "hPa");
             }
         catch (JSONException e)
         {
@@ -152,20 +153,7 @@ public class weather {
 
     private void ParseJSONForecast(String json){}
 
-    private Runnable astronomyThread = new Runnable() {
 
-        public void run()
-        {
-          ParseJSONAstronomy(QueryWeather(astronomyQuery + tags + format));
-        }
-    };
-    private Runnable conditionsThread = new Runnable() {
-
-        public void run()
-        {
-            ParseJSONCondistios(QueryWeather(conditionsQuery + tags + format));
-        }
-    };
     private Runnable LoadPhotoFromURLThread = new Runnable() {
 
         public void run()
