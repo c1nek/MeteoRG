@@ -189,6 +189,67 @@
                     android:layout_marginEnd="42dp"
                     android:layout_alignTop="@+id/imageView6"
                     android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#64000000">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/moonImage"
+                    android:layout_marginLeft="44dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Wiek:"
+                    android:id="@+id/moonAge"
+                    android:textSize="17dp"
+                    android:layout_alignTop="@+id/moonImage"
+                    android:layout_toEndOf="@+id/moonImage"
+                    android:textColor="#ffffffff"
+                    android:layout_marginLeft="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Widoczność:"
+                    android:id="@+id/moonPrecent"
+                    android:textSize="17dp"
+                    android:layout_alignBottom="@+id/moonImage"
+                    android:layout_toEndOf="@+id/moonImage"
+                    android:textColor="#ffffffff"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/moonAgeA"
+                    android:layout_alignTop="@+id/moonAge"
+                    android:layout_toEndOf="@+id/moonPrecent"
+                    android:textColor="#ffffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/moonPrecentageA"
+                    android:layout_alignBottom="@+id/moonImage"
+                    android:layout_alignStart="@+id/moonAgeA"
+                    android:textColor="#ffffffff"
+                    android:layout_marginLeft="0dp" />
+
             </RelativeLayout>
 
         </LinearLayout>

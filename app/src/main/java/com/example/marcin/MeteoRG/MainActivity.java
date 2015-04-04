@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import android.util.Log;
@@ -165,7 +166,6 @@ public class MainActivity extends FragmentActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
         stoperStrat = System.currentTimeMillis();
 
         imageFlickrPhoto = (ImageView) findViewById(R.id.flickrPhoto);
@@ -212,7 +212,6 @@ public class MainActivity extends FragmentActivity {
                 addressField.setVisibility(View.VISIBLE);
                 timeField.setVisibility(View.VISIBLE);
 
-
                 getWeather();
                 setActivityFields();
                 fillDataFragments();
@@ -220,12 +219,11 @@ public class MainActivity extends FragmentActivity {
             }
        });
 
-        clockUpdateThread.start();
-
         this.initialisePaging();
         getLocation();
         setActivityFields();
         getWeather();
+        clockUpdateThread.start();
         Log.i("pogoda", WeatherObject.pressure + "hPa");
         new Thread(getFlickrThread).start();
         stoperStop = System.currentTimeMillis();
@@ -252,7 +250,6 @@ public class MainActivity extends FragmentActivity {
         Fragment fragment2 = fragments.get(1);
         id2 = fragment1.getId();
     }
-
 
     ////////BUTTONS///////////
 
@@ -379,12 +376,16 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void clockUpdate(){
-        time = Calendar.getInstance().getTime();
+
+        Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        long utcTime = cal1.getTimeInMillis();
+        Date d = new Date(utcTime + WeatherObject.timeOffset);
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        timeString = sdf.format(time);
+        timeString = sdf.format(d);
         timeField.setText(timeString);
     }
-//TODO  ZAKTUALIZOWAC CZAS PRZY ZMIANIE LOKALIZACJI
+
     Thread clockUpdateThread = new Thread() {
 
         @Override

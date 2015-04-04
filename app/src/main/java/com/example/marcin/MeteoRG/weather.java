@@ -58,6 +58,9 @@ public class weather {
     Bitmap moonImage = null;
     String moonImageURL = null;
 
+    //time ///
+    long timeOffset = 0;
+
     public weather(double lat, double lng) {
 
         tags= String.valueOf(lat) + "," + String.valueOf(lng);
@@ -115,7 +118,7 @@ public class weather {
                     moonPercent = JSONObject_moon_phase.getInt("percentIlluminated");
                     moonAge = JSONObject_moon_phase.getInt("ageOfMoon");
                     moonImageURL = "http://www.imooncal.com/cs/i/1_m"+moonAge+".jpg";
-                    new Thread(LoadPhotoFromURLThread).start();
+
 
             JSONObject JSONObject_sun_phase = JsonObjectA.getJSONObject("sun_phase");
                 JSONObject JSONObject_sunrise = JSONObject_sun_phase.getJSONObject("sunrise");
@@ -139,6 +142,8 @@ public class weather {
             // JSONObject JSONObject_response = JsonObject.getJSONObject("response");
 
             JSONObject JSONObject_current_observation = JsonObjectW.getJSONObject("current_observation");
+            String timeOffset_s = (JSONObject_current_observation.getString("local_tz_offset"));
+            timeOffset = Long.parseLong(timeOffset_s.substring(0,3))*3600000;
             temp = (JSONObject_current_observation.getInt("temp_c"));
             pressure = JSONObject_current_observation.getInt("pressure_mb");
             humidity = JSONObject_current_observation.getString("relative_humidity");
@@ -154,20 +159,7 @@ public class weather {
     private void ParseJSONForecast(String json){}
 
 
-    private Runnable LoadPhotoFromURLThread = new Runnable() {
 
-        public void run()
-        {
-            try {
-                URL Url = new URL(moonImageURL);
-                moonImage = BitmapFactory.decodeStream(Url.openConnection().getInputStream());
-            } catch (MalformedURLException e) {
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
 
 
 
