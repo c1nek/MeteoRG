@@ -44,7 +44,7 @@ public class weather {
     int pressure = 0;
     String humidity = null;
     String conditions = null;
-    String conditionsShort = "rain";
+    String conditionsShort = null;
 
     //sun details//
     int sunriseTimeMin = 0;
@@ -143,12 +143,12 @@ public class weather {
 
             JSONObject JSONObject_current_observation = JsonObjectW.getJSONObject("current_observation");
             String timeOffset_s = (JSONObject_current_observation.getString("local_tz_offset"));
-            timeOffset = Long.parseLong(timeOffset_s.substring(0,3))*3600000;
+            timeOffset = (Long.parseLong(timeOffset_s.substring(0,3))*3600000)-7200000;
             temp = (JSONObject_current_observation.getInt("temp_c"));
             pressure = JSONObject_current_observation.getInt("pressure_mb");
             humidity = JSONObject_current_observation.getString("relative_humidity");
             conditions = JSONObject_current_observation.getString("weather");
-            android.util.Log.i("weather: ", pressure + "hPa");
+            conditionsShort = getShortCond(JSONObject_current_observation.getString("icon"));
             }
         catch (JSONException e)
         {
@@ -158,9 +158,34 @@ public class weather {
 
     private void ParseJSONForecast(String json){}
 
+    private String getShortCond(String in){
+        String Out = null;
+        if(in.equals("chanceflurries") || in.equals("chancerain") || in.equals("chancesleet") || in.equals("tstorms") || in.equals("chancetstorms") || in.equals("flurries") || in.equals("sleet") || in.equals("rain"))
+        {
+            return Out = "rain,";
+        }
+        else if(in.equals("chancesnow") || in.equals("snow"))
+        {
+            return Out = "snow,";
+        }
+        else if(in.equals("clear") || in.equals("sunny") || in.equals("partlysunny") || in.equals("mostlysunny"))
+        {
+            return Out = "sunny,";
+        }
+        else if(in.equals("cloudy") || in.equals("partlycloudy") || in.equals("mostlycloudy"))
+        {
+            return Out = "cloudy,";
+        }
+        else if(in.equals("fog") || in.equals("hazy"))
+        {
+            return Out = "fog,";
+        }
+        else
+        {
+            return Out = "";
+        }
 
-
-
+    }
 
 
 }

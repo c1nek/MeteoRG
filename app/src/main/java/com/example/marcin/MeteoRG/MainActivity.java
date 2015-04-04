@@ -139,8 +139,10 @@ public class MainActivity extends FragmentActivity {
     Vibrator vibra;
 
     //time type//
-    Date time = null;
+    Date timeBasedOnTimezone = null;
     String timeString = null;
+    int actualHour = 0;
+    int actualMin = 0;
 
 
     long stoperStrat;
@@ -159,6 +161,8 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //TODO splasz skrin
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -223,8 +227,8 @@ public class MainActivity extends FragmentActivity {
         getLocation();
         setActivityFields();
         getWeather();
+        setDefaultImage();
         clockUpdateThread.start();
-        Log.i("pogoda", WeatherObject.pressure + "hPa");
         new Thread(getFlickrThread).start();
         stoperStop = System.currentTimeMillis();
         Log.i("Czas uruchomienia", String.valueOf((stoperStop - stoperStrat) / 1000));
@@ -340,14 +344,22 @@ public class MainActivity extends FragmentActivity {
         detailLayout.fillWithData();
     }
 
-    public void setDefaultBackgroung(){
-//TODO domyslne tlo dorobicz
-    }
-
     public String createFlickrTags(){
         String tagsString = null;
 
-           tagsString = clearString(WeatherObject.conditionsShort+" "+globalCity);
+        //TODO actual time = null
+
+            if ((actualHour < WeatherObject.sunsetTimeHour) && (actualHour > WeatherObject.sunriseTimeHour) && (actualMin < WeatherObject.sunsetTimeMin) && (actualMin > WeatherObject.sunriseTimeMin)) {
+                tagsString = clearString(WeatherObject.conditionsShort + globalCity);
+            } else {
+                tagsString = clearString("night," + globalCity);
+            }
+        Log.i("weather time:", "SUNSET " + WeatherObject.sunsetTimeHour + ":" + WeatherObject.sunsetTimeMin + " SUNRISR " + WeatherObject.sunriseTimeHour + ":" + WeatherObject.sunriseTimeMin);
+        Log.i("flickr tagz time:", actualHour + ":" + actualMin);
+        Log.i("flickr tagz:", tagsString);
+
+
+        //TODO night mode flickr
 
         return tagsString;
     }
@@ -375,14 +387,45 @@ public class MainActivity extends FragmentActivity {
         return newString;
     }
 
-    public void clockUpdate(){
+    public void setDefaultImage(){
+        if(WeatherObject.conditionsShort.equals("rain,"))
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.rain);
+        }
+        else if(WeatherObject.conditionsShort.equals("snow,"))
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.snow);
+        }
+        else if(WeatherObject.conditionsShort.equals("sunny,"))
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.sunny);
+        }
+        else if(WeatherObject.conditionsShort.equals("cloudy,"))
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.cloudy);
+        }
+        else if(WeatherObject.conditionsShort.equals("fog,"))
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.fog);
+        }
+        else
+        {
+            imageFlickrPhoto.setImageResource(R.drawable.cloudy);
+        }
 
+
+    }
+
+    public void clockUpdate(){
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         long utcTime = cal1.getTimeInMillis();
-        Date d = new Date(utcTime + WeatherObject.timeOffset);
+        timeBasedOnTimezone = new Date(utcTime + WeatherObject.timeOffset);
+
+        actualHour = timeBasedOnTimezone.getHours();
+        actualMin = timeBasedOnTimezone.getMinutes();
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        timeString = sdf.format(d);
+        timeString = sdf.format(timeBasedOnTimezone);
         timeField.setText(timeString);
     }
 
@@ -411,7 +454,7 @@ public class MainActivity extends FragmentActivity {
         {
             Log.i("Flickr", "Flickr thread start");
             FlickrTags = createFlickrTags();
-            FlickrObject = new flickr(FlickrTags);
+            FlickrObject = new flickr(FlickrTags, LocationObject.latitude, LocationObject.longitude);
 
             if (FlickrObject.bmFlickr != null) {
                 runOnUiThread(new Runnable() {

@@ -41,13 +41,13 @@ public class flickr {
 
     Bitmap bmFlickr;
 
-    public flickr(String tags){
+    public flickr(String tags, double lat, double lon){
         this.Tags = tags;
-        QueryFlickr(tags);
+        QueryFlickr(tags, Double.toString(lat), Double.toString(lon));
         ParseJSON(searchResult);
     }
 
-    private String QueryFlickr(String q){
+    private String QueryFlickr(String q, String lat, String lon){
 
         String qResult = null;
 
@@ -58,10 +58,14 @@ public class flickr {
                         + FlickrQuery_format
                         + FlickrContentType
                         + FlickrSort
-                        + FlickrQuery_tag + q
-                        + FlickrQuery_key + FlickrApiKey;
+                        + FlickrQuery_key + FlickrApiKey
+                       // + "&lat=" + lat + "&lon=" + lon + "&radius=32"
+                        + FlickrQuery_tag + q;
+
+                //TODO stestować
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
+
 
         try {
             HttpEntity httpEntity = httpClient.execute(httpGet).getEntity();

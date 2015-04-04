@@ -42,6 +42,7 @@ public class details_weather_layout extends Fragment{
         humFiled = (TextView) mainView.findViewById(R.id.hum);
         pressField = (TextView) mainView.findViewById(R.id.press);
         sunsetTimeField = (TextView) mainView.findViewById(R.id.sunset);
+        //TODO poprawic pojedyncze minuty
         sunriceTimeFiled = (TextView) mainView.findViewById(R.id.sunrise);
         moonAgeField = (TextView) mainView.findViewById(R.id.moonAgeA);
         moonPrecentField = (TextView) mainView.findViewById(R.id.moonPrecentageA);
@@ -65,7 +66,7 @@ public class details_weather_layout extends Fragment{
             pressField.setText((Integer.toString(WeatherObjectFragment2.pressure)) + " hPa");
 
             String formattedSunsetDate = WeatherObjectFragment2.sunsetTimeHour + ":" + WeatherObjectFragment2.sunsetTimeMin;
-            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + WeatherObjectFragment2.sunsetTimeMin;
+            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + WeatherObjectFragment2.sunriseTimeMin;
 
             sunsetTimeField.setText(formattedSunriceDate);
             sunriceTimeFiled.setText(formattedSunsetDate);
