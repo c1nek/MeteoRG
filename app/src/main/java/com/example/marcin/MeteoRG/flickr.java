@@ -65,8 +65,6 @@ public class flickr {
                 //TODO stestować
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
-
-
         try {
             HttpEntity httpEntity = httpClient.execute(httpGet).getEntity();
 
@@ -81,9 +79,7 @@ public class flickr {
                 while ((stringReadLine = bufferedreader.readLine()) != null) {
                     stringBuilder.append(stringReadLine + "\n");
                 }
-
                 qResult = stringBuilder.toString();
-
             }
 
         } catch (ClientProtocolException e) {
@@ -95,7 +91,6 @@ public class flickr {
         }
         searchResult = qResult;
         return qResult;}
-
 
     private String ParseJSON(String json) {
 
@@ -136,7 +131,6 @@ public class flickr {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return jResult;
     }
 
@@ -151,7 +145,9 @@ public class flickr {
         URL FlickrPhotoUrl = new URL(FlickrPhotoPath);
 
         try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
             bm = BitmapFactory.decodeStream(FlickrPhotoUrl.openConnection().getInputStream());
+            options.inJustDecodeBounds = false;
         } catch (MalformedURLException e) {
 
         } catch (IOException e) {
@@ -160,7 +156,4 @@ public class flickr {
         bmFlickr = bm;
         return bm;
     }
-
-
-
 }

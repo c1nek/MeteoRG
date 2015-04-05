@@ -466,9 +466,6 @@ public class MainActivity extends FragmentActivity {
              else{
                 FlickrTags = WeatherObject.conditionsShort;
                 new Thread(getFlickrThread).start();
-               // getFlickrThread.run();
-
-               //TODO SkImageDecoder::FactoryReturnedNull DO OGARNIECIA TO DZIADOSTWO
             }
             Log.i("Flickr", "Flickr thread stop");
         }
