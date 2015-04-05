@@ -42,7 +42,6 @@ public class details_weather_layout extends Fragment{
         humFiled = (TextView) mainView.findViewById(R.id.hum);
         pressField = (TextView) mainView.findViewById(R.id.press);
         sunsetTimeField = (TextView) mainView.findViewById(R.id.sunset);
-        //TODO poprawic pojedyncze minuty
         sunriceTimeFiled = (TextView) mainView.findViewById(R.id.sunrise);
         moonAgeField = (TextView) mainView.findViewById(R.id.moonAgeA);
         moonPrecentField = (TextView) mainView.findViewById(R.id.moonPrecentageA);
@@ -65,8 +64,8 @@ public class details_weather_layout extends Fragment{
             humFiled.setText(WeatherObjectFragment2.humidity);
             pressField.setText((Integer.toString(WeatherObjectFragment2.pressure)) + " hPa");
 
-            String formattedSunsetDate = WeatherObjectFragment2.sunsetTimeHour + ":" + WeatherObjectFragment2.sunsetTimeMin;
-            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + WeatherObjectFragment2.sunriseTimeMin;
+            String formattedSunsetDate = WeatherObjectFragment2.sunsetTimeHour + ":" + String.format("%02d", WeatherObjectFragment2.sunsetTimeMin);
+            String formattedSunriceDate  = WeatherObjectFragment2.sunriseTimeHour + ":" + String.format("%02d",WeatherObjectFragment2.sunriseTimeMin);
 
             sunsetTimeField.setText(formattedSunriceDate);
             sunriceTimeFiled.setText(formattedSunsetDate);
@@ -82,8 +81,8 @@ public class details_weather_layout extends Fragment{
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
 
-       int radius = Math.min(h / 2, w / 2);
-        Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Bitmap.Config.ARGB_8888);
+       int radius = Math.min((h / 2)-2, (w / 2)-2);
+        Bitmap output = Bitmap.createBitmap(w + 4, h + 4, Bitmap.Config.ARGB_8888);
 
         Paint p = new Paint();
         p.setAntiAlias(true);
@@ -98,10 +97,8 @@ public class details_weather_layout extends Fragment{
 
         c.drawBitmap(bitmap, 4, 4, p);
         p.setXfermode(null);
-        p.setStyle(Paint.Style.STROKE);
-        p.setColor(Color.WHITE);
-        p.setStrokeWidth(3);
-        c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+
+
 
         return output;
     }
