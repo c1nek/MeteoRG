@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -31,7 +32,9 @@ import java.net.URL;
 /**
  * Created by Marcin on 2015-03-28.
  */
-public class details_weather extends Fragment{
+public class details_weather extends Fragment
+        //implements OnMapReadyCallback
+{
     View mainView;
     weather WeatherObjectFragment2;
 
@@ -76,9 +79,17 @@ public class details_weather extends Fragment{
 
 
 
+
         fillWithData();
 
       //  SupportMapFragment m = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+
+        SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.map, mMapFragment);
+        fragmentTransaction.commit();
+
+        mMapFragment.getId();
 
         return mainView;
     }
