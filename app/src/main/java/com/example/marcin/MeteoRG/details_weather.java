@@ -3,42 +3,51 @@ package com.example.marcin.MeteoRG;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by Marcin on 2015-03-28.
  */
-public class details_weather_layout extends Fragment{
+public class details_weather extends Fragment{
     View mainView;
     weather WeatherObjectFragment2;
 
-    TextView maxtempField, mintempField,humFiled,pressField,sunsetTimeField,sunriceTimeFiled, moonAgeField, moonPrecentField;
+    TextView visField, windField,humFiled,pressField,sunsetTimeField,sunriceTimeFiled, moonAgeField, moonPrecentField;
 
     ImageView moonImage;
+
+    private SupportMapFragment fragment;
+    private GoogleMap map;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.details_weather, container, false);
 
 
-        maxtempField = (TextView) mainView.findViewById(R.id.maxTemp);
-        mintempField = (TextView) mainView.findViewById(R.id.minTemp);
+        visField = (TextView) mainView.findViewById(R.id.visibility);
+        windField = (TextView) mainView.findViewById(R.id.windSpeed);
         humFiled = (TextView) mainView.findViewById(R.id.hum);
         pressField = (TextView) mainView.findViewById(R.id.press);
         sunsetTimeField = (TextView) mainView.findViewById(R.id.sunset);
@@ -49,18 +58,39 @@ public class details_weather_layout extends Fragment{
         moonImage = (ImageView) mainView.findViewById(R.id.moonImage);
 
         WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
+
+        //map = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        //map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+        //map_weather mapFragment = new map_weather();
+        //FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        //transaction.add(R.id.map, mapFragment).commit();
+
+
+
+        //map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+//       map = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+
+        //GoogleMap map = getMapFragment().getMap();
+
+
+
         fillWithData();
+
+      //  SupportMapFragment m = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
 
         return mainView;
     }
+
 
     public void fillWithData()
     {
         new Thread(LoadPhotoFromURLThread).start();
         try {
             WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
-            mintempField.setText((Integer.toString(WeatherObjectFragment2.tempMin)) + "\u00b0" + "C");
-            maxtempField.setText((Integer.toString(WeatherObjectFragment2.tempMax)) + "\u00b0" + "C");
+            visField.setText(WeatherObjectFragment2.visibility + " km");
+            windField.setText(WeatherObjectFragment2.windSpeed + " km/h");
             humFiled.setText(WeatherObjectFragment2.humidity);
             pressField.setText((Integer.toString(WeatherObjectFragment2.pressure)) + " hPa");
 
@@ -97,8 +127,6 @@ public class details_weather_layout extends Fragment{
 
         c.drawBitmap(bitmap, 4, 4, p);
         p.setXfermode(null);
-
-
 
         return output;
     }

@@ -13,8 +13,8 @@
         android:id="@+id/temp"
         android:textSize="65dp"
         android:textColor="#ffffffff"
-        android:layout_above="@+id/description"
-        android:layout_alignStart="@+id/description" />
+        android:layout_above="@+id/feelsLike"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,4 +27,15 @@
         android:textColor="#ffffffff"
         android:textSize="25dp"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0"
+        android:id="@+id/feelsLike"
+        android:textColor="#ffffffff"
+        android:layout_above="@+id/description"
+        android:layout_alignParentStart="true"
+        android:textSize="14dp" />
 </RelativeLayout>

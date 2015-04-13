@@ -146,8 +146,8 @@ public class flickr {
 
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            bm = BitmapFactory.decodeStream(FlickrPhotoUrl.openConnection().getInputStream());
             options.inJustDecodeBounds = false;
+            bm = BitmapFactory.decodeStream(FlickrPhotoUrl.openConnection().getInputStream());
         } catch (MalformedURLException e) {
 
         } catch (IOException e) {

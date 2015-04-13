@@ -1,258 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:tag="frag2"
     android:padding="10dp">
 
-    <ScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/scrollView" >
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_height="wrap_content"
+            android:background="#64000000"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#64000000"
-                android:layout_marginBottom="10dp"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView2"
-                    android:src="@drawable/temp_min_ico"
-                    android:layout_marginStart="66dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="10dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="000"
-                    android:id="@+id/minTemp"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignTop="@+id/maxTemp"
-                    android:layout_toEndOf="@+id/imageView2"
-                    android:layout_centerVertical="true" />
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView"
-                    android:src="@drawable/temp_max_ico"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignTop="@+id/maxTemp"
-                    android:layout_toStartOf="@+id/maxTemp"
-                    android:layout_centerVertical="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="[00:00]"
-                    android:id="@+id/maxTemp"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginEnd="57dp"
-                    android:layout_alignTop="@+id/imageView2"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="false"
-                    android:layout_centerVertical="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="#64000000"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView4"
-                    android:layout_alignBottom="@+id/hum"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/pressure_icon"
-                    android:layout_marginLeft="44dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="1000 hPa"
-                    android:id="@+id/press"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_alignTop="@+id/imageView3"
-                    android:layout_toEndOf="@+id/imageView4"
-                    android:layout_centerVertical="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="99%"
-                    android:id="@+id/hum"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="45dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/imageView3"
-                    android:layout_marginStart="14dp" />
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView3"
-                    android:src="@drawable/humidity_icon"
-                    android:layout_alignTop="@+id/imageView4"
-                    android:layout_toEndOf="@+id/press"
-                    android:layout_marginLeft="45dp"
-                    android:layout_marginRight="2dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#64000000"
-                android:padding="10dp"
-                android:layout_alignParentTop="true"
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/wind_icon"
+                android:layout_marginStart="66dp"
+                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
+                android:layout_marginLeft="44dp"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="12.5 km/h"
+                android:id="@+id/windSpeed"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignTop="@+id/visibility"
+                android:layout_toEndOf="@+id/imageView2"
+                android:layout_centerVertical="true" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/vis_icon"
+                android:layout_marginLeft="16dp"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/visibility" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="13.7 km"
+                android:id="@+id/visibility"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginEnd="28dp"
+                android:layout_alignTop="@+id/imageView"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#64000000"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView4"
+                android:layout_alignBottom="@+id/hum"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/pressure_icon"
+                android:layout_marginLeft="44dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="1000 hPa"
+                android:id="@+id/press"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_alignTop="@+id/imageView3"
+                android:layout_toEndOf="@+id/imageView4"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="99%"
+                android:id="@+id/hum"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="45dp"
+                android:gravity="left"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/imageView3" />
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView3"
+                android:src="@drawable/humidity_icon"
+                android:layout_marginRight="2dp"
+                android:layout_alignTop="@+id/imageView4"
+                android:layout_toEndOf="@+id/press"
+                android:layout_marginStart="38dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:background="#64000000"
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView5"
+                android:src="@drawable/sunset_icon"
+                android:layout_marginStart="66dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="44dp" />
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:id="@+id/imageView6"
+                android:src="@drawable/sunrise_icon"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/sunrise" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00:00"
+                android:id="@+id/sunset"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignTop="@+id/sunrise"
+                android:layout_toEndOf="@+id/imageView5"
+                android:layout_marginStart="18dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00:00"
+                android:id="@+id/sunrise"
+                android:textColor="#ffffffff"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="42dp"
+                android:layout_alignTop="@+id/imageView6"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#64000000">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/moonImage"
+                android:layout_marginLeft="44dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp" />
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView5"
-                    android:src="@drawable/sunset_icon"
-                    android:layout_marginStart="66dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="44dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Wiek:"
+                android:id="@+id/moonAge"
+                android:textSize="17dp"
+                android:layout_alignTop="@+id/moonImage"
+                android:layout_toEndOf="@+id/moonImage"
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="10dp" />
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:id="@+id/imageView6"
-                    android:src="@drawable/sunrise_icon"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toStartOf="@+id/sunrise" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Widoczność:"
+                android:id="@+id/moonPrecent"
+                android:textSize="17dp"
+                android:layout_alignBottom="@+id/moonImage"
+                android:layout_toEndOf="@+id/moonImage"
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="00:00"
-                    android:id="@+id/sunset"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignTop="@+id/sunrise"
-                    android:layout_toEndOf="@+id/imageView5"
-                    android:layout_marginStart="18dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/moonAgeA"
+                android:layout_alignTop="@+id/moonAge"
+                android:layout_toEndOf="@+id/moonPrecent"
+                android:textColor="#ffffffff" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="00:00"
-                    android:id="@+id/sunrise"
-                    android:textColor="#ffffffff"
-                    android:textSize="17dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="42dp"
-                    android:layout_alignTop="@+id/imageView6"
-                    android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/moonPrecentageA"
+                android:layout_alignBottom="@+id/moonImage"
+                android:layout_alignStart="@+id/moonAgeA"
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="0dp" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#64000000">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#64000000"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+<!--
+          <fragment
+               android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/moonImage"
-                    android:layout_marginLeft="44dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp" />
+                class="com.example.marcin.MeteoRG.map_weather" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Wiek:"
-                    android:id="@+id/moonAge"
-                    android:textSize="17dp"
-                    android:layout_alignTop="@+id/moonImage"
-                    android:layout_toEndOf="@+id/moonImage"
-                    android:textColor="#ffffffff"
-                    android:layout_marginLeft="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Widoczność:"
-                    android:id="@+id/moonPrecent"
-                    android:textSize="17dp"
-                    android:layout_alignBottom="@+id/moonImage"
-                    android:layout_toEndOf="@+id/moonImage"
-                    android:textColor="#ffffffff"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/moonAgeA"
-                    android:layout_alignTop="@+id/moonAge"
-                    android:layout_toEndOf="@+id/moonPrecent"
-                    android:textColor="#ffffffff" />
+                -->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/moonPrecentageA"
-                    android:layout_alignBottom="@+id/moonImage"
-                    android:layout_alignStart="@+id/moonAgeA"
-                    android:textColor="#ffffffff"
-                    android:layout_marginLeft="0dp" />
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

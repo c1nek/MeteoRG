@@ -1,14 +1,14 @@
 package com.example.marcin.MeteoRG;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.os.Vibrator;
-
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -30,8 +30,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Vector;
-
-import android.util.Log;
 
 class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
@@ -132,8 +130,9 @@ public class MainActivity extends FragmentActivity {
     List<Fragment> fragments;
     int id1, id2;
 
-    basic_weather_layout basicFragment;
-    details_weather_layout detailsFragment;
+    basic_weather basicFragment;
+    details_weather detailsFragment;
+    forecast_weather forecastFragment;
 
     //system types//
     Vibrator vibra;
@@ -241,8 +240,9 @@ public class MainActivity extends FragmentActivity {
     private void initialisePaging() {
 
         fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, basic_weather_layout.class.getName()));
-        fragments.add(Fragment.instantiate(this, details_weather_layout.class.getName()));
+        fragments.add(Fragment.instantiate(this, basic_weather.class.getName()));
+        fragments.add(Fragment.instantiate(this, details_weather.class.getName()));
+        fragments.add(Fragment.instantiate(this, forecast_weather.class.getName()));
 
         this.mPagerAdapter = new myPageAdapter(super.getSupportFragmentManager(), fragments);
         ViewPager pager = (ViewPager) super.findViewById(R.id.pager);
@@ -252,6 +252,9 @@ public class MainActivity extends FragmentActivity {
         id1 = fragment1.getId();
 
         Fragment fragment2 = fragments.get(1);
+        id2 = fragment1.getId();
+
+        Fragment fragment3 = fragments.get(2);
         id2 = fragment1.getId();
     }
 
@@ -338,10 +341,12 @@ public class MainActivity extends FragmentActivity {
 
 
     public void fillDataFragments(){
-        basic_weather_layout basicLayout = (basic_weather_layout) fragments.get(0);
+        basic_weather basicLayout = (basic_weather) fragments.get(0);
         basicLayout.fillWithData();
-        details_weather_layout detailLayout = (details_weather_layout) fragments.get(1);
+        details_weather detailLayout = (details_weather) fragments.get(1);
         detailLayout.fillWithData();
+//        details_weather forecastLayout = (details_weather) fragments.get(2);
+  //      detailLayout.fillWithData();
     }
 
     public String createFlickrTags(){
