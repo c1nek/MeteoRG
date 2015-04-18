@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -140,7 +139,7 @@ public class flickr {
         Bitmap bm= null;
 
         String FlickrPhotoPath =
-                "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + "_c.jpg";
+                "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + "_b.jpg";
 
         URL FlickrPhotoUrl = new URL(FlickrPhotoPath);
 

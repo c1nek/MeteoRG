@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +36,7 @@ public class details_weather extends Fragment
 {
     View mainView;
     weather WeatherObjectFragment2;
+    gps LocationObjectFragment2;
 
     TextView visField, windField,humFiled,pressField,sunsetTimeField,sunriceTimeFiled, moonAgeField, moonPrecentField;
 
@@ -45,12 +44,10 @@ public class details_weather extends Fragment
 
     private FragmentActivity myContext;
 
-    private SupportMapFragment fragment;
     private GoogleMap map;
+    Marker cityMarker;
 
-
-
-    static final LatLng HAMBURG = new LatLng(53.558, 9.927);
+    LatLng cityLatLng;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.details_weather, container, false);
@@ -67,41 +64,13 @@ public class details_weather extends Fragment
 
         moonImage = (ImageView) mainView.findViewById(R.id.moonImage);
 
-        WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
-
-        //map = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        //map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-
-        //map_weather mapFragment = new map_weather();
-        //FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        //transaction.add(R.id.map, mapFragment).commit();
-
-
-
-        //map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-//       map = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-
-        //GoogleMap map = getMapFragment().getMap();
-
-
-
+        FragmentManager fragManager = this.getChildFragmentManager();
+        SupportMapFragment mapFrag = (SupportMapFragment) fragManager.findFragmentById(R.id.map);
+        map = mapFrag.getMap();
+       // map.getUiSettings().setAllGesturesEnabled(false);
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         fillWithData();
-
-        FragmentManager fragManager = this.getChildFragmentManager();
-
-        //map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-        SupportMapFragment mapFrag = (SupportMapFragment) fragManager.findFragmentById(R.id.map);
-
-        map = mapFrag.getMap();
-
-        Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
-
-        // Zoom in, animating the camera.
-        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
         return mainView;
     }
@@ -112,12 +81,12 @@ public class details_weather extends Fragment
         super.onAttach(activity);
     }
 
-
     public void fillWithData()
     {
         new Thread(LoadPhotoFromURLThread).start();
         try {
             WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
+            LocationObjectFragment2 = ((MainActivity)getActivity()).getGpsObject();
             visField.setText(WeatherObjectFragment2.visibility + " km");
             windField.setText(WeatherObjectFragment2.windSpeed + " km/h");
             humFiled.setText(WeatherObjectFragment2.humidity);
@@ -131,6 +100,14 @@ public class details_weather extends Fragment
 
             moonAgeField.setText(WeatherObjectFragment2.moonAge + " dni");
             moonPrecentField.setText(WeatherObjectFragment2.moonPercent + "%");
+
+            if (cityMarker != null) {
+                cityMarker.remove();
+            }
+
+            cityLatLng = new LatLng(LocationObjectFragment2.latitude, LocationObjectFragment2.longitude);
+            cityMarker = map.addMarker(new MarkerOptions().position(cityLatLng).title(LocationObjectFragment2.City));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLatLng, 9));
         }
         catch (Exception e){}
 

@@ -237,6 +237,8 @@ public class MainActivity extends FragmentActivity {
         return WeatherObject;
     }
 
+    public gps getGpsObject(){ return LocationObject;}
+
     private void initialisePaging() {
 
         fragments = new Vector<Fragment>();

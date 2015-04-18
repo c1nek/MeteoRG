@@ -1,7 +1,6 @@
 package com.example.marcin.MeteoRG;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -18,10 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Marcin on 2015-03-23.

@@ -3,11 +3,12 @@ package com.example.marcin.MeteoRG;
 /**
  * Created by Marcin on 2015-03-21.
  */
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,8 +24,6 @@ import java.util.Locale;
  * Created by Marcin on 2015-03-21.
  */
 public class gps extends Service implements LocationListener{
-
-    Geocoder gcd;
 
     private Context mContext = null;
 
@@ -98,6 +97,7 @@ public class gps extends Service implements LocationListener{
 
         return location;
     }
+
     public String getCity(double lat, double lon){
 
         String city = null, country = null;
