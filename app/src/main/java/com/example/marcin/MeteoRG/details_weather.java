@@ -1,14 +1,15 @@
 package com.example.marcin.MeteoRG;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,10 +21,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -42,8 +43,14 @@ public class details_weather extends Fragment
 
     ImageView moonImage;
 
+    private FragmentActivity myContext;
+
     private SupportMapFragment fragment;
     private GoogleMap map;
+
+
+
+    static final LatLng HAMBURG = new LatLng(53.558, 9.927);
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.details_weather, container, false);
@@ -82,16 +89,27 @@ public class details_weather extends Fragment
 
         fillWithData();
 
-      //  SupportMapFragment m = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+        FragmentManager fragManager = this.getChildFragmentManager();
 
-        SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.map, mMapFragment);
-        fragmentTransaction.commit();
+        //map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-        mMapFragment.getId();
+        SupportMapFragment mapFrag = (SupportMapFragment) fragManager.findFragmentById(R.id.map);
+
+        map = mapFrag.getMap();
+
+        Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
+
+        // Zoom in, animating the camera.
+        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
         return mainView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext=(FragmentActivity) activity;
+        super.onAttach(activity);
     }
 
 

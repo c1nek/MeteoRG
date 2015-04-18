@@ -4,14 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -424,31 +421,40 @@ public class forecast_weather extends Fragment {
             int[] pix = new int[picw * pich];
             bitmap.getPixels(pix, 0, picw, 0, 0, picw, pich);
 
-            for (int y = 0; y < pich; y++) {
+            for (int y = 0; y < pich; y++)
+            {
                 // from left to right
-                for (int x = 0; x < picw; x++) {
+                for (int x = 0; x < picw; x++)
+                {
                     int index = y * picw + x;
                     int r = (pix[index] >> 16) & 0xff;
                     int g = (pix[index] >> 8) & 0xff;
                     int b = pix[index] & 0xff;
 
-                    if (pix[index] == Color.WHITE) {
+                    if (r>150 && g>150 && b>150)
+                    {
                         pix[index] = Color.TRANSPARENT;
-                    } else {
+                    }
+                    else
+                    {
                         break;
                     }
                 }
 
                 // from right to left
-                for (int x = picw - 1; x >= 0; x--) {
+                for (int x = picw - 1; x >= 0; x--)
+                {
                     int index = y * picw + x;
                     int r = (pix[index] >> 16) & 0xff;
                     int g = (pix[index] >> 8) & 0xff;
                     int b = pix[index] & 0xff;
 
-                    if (pix[index] == Color.WHITE) {
+                    if (r>150 && g>150 && b>150)
+                    {
                         pix[index] = Color.TRANSPARENT;
-                    } else {
+                    }
+                    else
+                    {
                         break;
                     }
                 }
