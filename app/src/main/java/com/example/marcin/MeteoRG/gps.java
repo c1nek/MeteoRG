@@ -131,7 +131,12 @@ public class gps extends Service implements LocationListener{
         if (addresses.size() > 0) {
             latitude = addresses.get(0).getLatitude();
             longitude = addresses.get(0).getLongitude();
-            City = addresses.get(0).getLocality();
+            if(addresses.get(0).getLocality() == null){
+                City = addresses.get(0).getFeatureName();
+            }
+            else {
+                City = addresses.get(0).getLocality();
+            }
             Country = addresses.get(0).getCountryCode();
         }
 
