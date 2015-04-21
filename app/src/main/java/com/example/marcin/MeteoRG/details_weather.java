@@ -87,7 +87,12 @@ public class details_weather extends Fragment
         try {
             WeatherObjectFragment2 = ((MainActivity)getActivity()).getwWather();
             LocationObjectFragment2 = ((MainActivity)getActivity()).getGpsObject();
-            visField.setText(WeatherObjectFragment2.visibility + " km");
+            if(WeatherObjectFragment2.visibility.equals("N/A")){
+                visField.setText("-- km");
+            }
+            else {
+                visField.setText(WeatherObjectFragment2.visibility + " km");
+            }
             windField.setText(WeatherObjectFragment2.windSpeed + " km/h");
             humFiled.setText(WeatherObjectFragment2.humidity);
             pressField.setText((Integer.toString(WeatherObjectFragment2.pressure)) + " hPa");

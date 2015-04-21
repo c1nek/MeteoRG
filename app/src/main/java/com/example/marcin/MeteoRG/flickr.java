@@ -61,7 +61,6 @@ public class flickr {
                        // + "&lat=" + lat + "&lon=" + lon + "&radius=32"
                         + FlickrQuery_tag + q;
 
-                //TODO stestować
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(qString);
         try {

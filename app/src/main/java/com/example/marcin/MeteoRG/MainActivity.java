@@ -161,8 +161,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO splasz skrin
-
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -216,6 +214,7 @@ public class MainActivity extends FragmentActivity {
                 timeField.setVisibility(View.VISIBLE);
 
                 getWeather();
+                setDefaultImage();
                 setActivityFields();
                 fillDataFragments();
                 new Thread(getFlickrThread).start();
@@ -227,6 +226,7 @@ public class MainActivity extends FragmentActivity {
         setActivityFields();
         getWeather();
         setDefaultImage();
+        getWindow().setBackgroundDrawable(null);
         clockUpdateThread.start();
         new Thread(getFlickrThread).start();
         stoperStop = System.currentTimeMillis();
@@ -354,9 +354,7 @@ public class MainActivity extends FragmentActivity {
     public String createFlickrTags(){
         String tagsString = null;
 
-        //TODO actual time = null
-
-            if ((actualHour < WeatherObject.sunsetTimeHour) && (actualHour > WeatherObject.sunriseTimeHour) && (actualMin < WeatherObject.sunsetTimeMin) && (actualMin > WeatherObject.sunriseTimeMin)) {
+            if ((actualHour < WeatherObject.sunsetTimeHour) && (actualHour > WeatherObject.sunriseTimeHour)) {
                 tagsString = clearString(WeatherObject.conditionsShort + globalCity);
             } else {
                 tagsString = clearString("night," + globalCity);
@@ -364,9 +362,6 @@ public class MainActivity extends FragmentActivity {
         Log.i("weather time:", "SUNSET " + WeatherObject.sunsetTimeHour + ":" + WeatherObject.sunsetTimeMin + " SUNRISR " + WeatherObject.sunriseTimeHour + ":" + WeatherObject.sunriseTimeMin);
         Log.i("flickr tagz time:", actualHour + ":" + actualMin);
         Log.i("flickr tagz:", tagsString);
-
-
-        //TODO night mode flickr
 
         return tagsString;
     }
@@ -395,30 +390,39 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void setDefaultImage(){
-        if(WeatherObject.conditionsShort.equals("rain,"))
+
+        if ((actualHour < WeatherObject.sunsetTimeHour) && (actualHour > WeatherObject.sunriseTimeHour)) {
+            if(WeatherObject.conditionsShort.equals("rain,"))
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.rain);
+            }
+            else if(WeatherObject.conditionsShort.equals("snow,"))
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.snow);
+            }
+            else if(WeatherObject.conditionsShort.equals("sunny,"))
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.sunny);
+            }
+            else if(WeatherObject.conditionsShort.equals("cloudy,"))
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.cloudy);
+            }
+            else if(WeatherObject.conditionsShort.equals("fog,"))
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.fog);
+            }
+            else
+            {
+                imageFlickrPhoto.setImageResource(R.drawable.cloudy);
+            }
+        } else
         {
-            imageFlickrPhoto.setImageResource(R.drawable.rain);
+            imageFlickrPhoto.setImageResource(R.drawable.night);
         }
-        else if(WeatherObject.conditionsShort.equals("snow,"))
-        {
-            imageFlickrPhoto.setImageResource(R.drawable.snow);
-        }
-        else if(WeatherObject.conditionsShort.equals("sunny,"))
-        {
-            imageFlickrPhoto.setImageResource(R.drawable.sunny);
-        }
-        else if(WeatherObject.conditionsShort.equals("cloudy,"))
-        {
-            imageFlickrPhoto.setImageResource(R.drawable.cloudy);
-        }
-        else if(WeatherObject.conditionsShort.equals("fog,"))
-        {
-            imageFlickrPhoto.setImageResource(R.drawable.fog);
-        }
-        else
-        {
-            imageFlickrPhoto.setImageResource(R.drawable.cloudy);
-        }
+
+
+
 
 
     }
@@ -442,7 +446,7 @@ public class MainActivity extends FragmentActivity {
         public void run() {
             try {
                 while (!isInterrupted()) {
-                    Thread.sleep(1000);
+                    Thread.sleep(10);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
